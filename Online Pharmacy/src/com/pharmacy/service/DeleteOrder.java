@@ -1,0 +1,41 @@
+package com.pharmacy.service;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.pharmacy.dao.OrdersDAO;
+
+/**
+ * Servlet implementation class DeleteOrder
+ */
+@WebServlet("/DeleteOrder")
+public class DeleteOrder extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    public DeleteOrder() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int id=Integer.parseInt(request.getParameter("id"));
+		OrdersDAO orderDAO=new OrdersDAO();
+		String result="";
+		result=orderDAO.deleteOrderByID(id);
+		PrintWriter out=response.getWriter();
+		out.print(result+"/n"+id);
+		if(result.equals("SUCCESS")) {
+			response.sendRedirect(request.getContextPath()+"/views/orders.jsp");
+		}
+		else {
+			response.getWriter().print("ERROR");
+		}
+	}
+
+
+}
