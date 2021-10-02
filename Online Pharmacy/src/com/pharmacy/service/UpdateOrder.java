@@ -39,7 +39,6 @@ public class UpdateOrder extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int orderId=Integer.parseInt(request.getParameter("orderId"));
 		String role=request.getParameter("role");
-		PrintWriter out=response.getWriter();
 		String status=request.getParameter("status");
 		String username=(String) request.getSession().getAttribute("username");
 		OrdersDAO dao=new OrdersDAO();

@@ -61,7 +61,7 @@ public class RegisterServlet extends HttpServlet {
 			response.sendRedirect("views/signup.jsp");
 		}
 		else {
-			request.getSession().setAttribute("msg", "Registered Failed");
+			request.getSession().setAttribute("msg", "Registration Failed");
 			response.sendRedirect("views/signup.jsp");
 		}
 	} 

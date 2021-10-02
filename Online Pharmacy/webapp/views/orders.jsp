@@ -26,30 +26,32 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body> 
 	<%
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
 	response.setHeader("Expires", "0");
 	String role = (String) session.getAttribute("role");
-	String username=(String) session.getAttribute("username");
+	String username = (String) session.getAttribute("username");
 	if (username == null || session.getAttribute("role") == null) {
 		response.sendRedirect("login.jsp");
 	} else {
-		OrdersDAO dao=new OrdersDAO();
-		List<OrdersBean> orders=dao.getOrdersByNameAndRole(username, role);
+		OrdersDAO dao = new OrdersDAO();
+		List<OrdersBean> orders = dao.getOrdersByNameAndRole(username, role);
 	%>
 
 	<%@include file="navbar.jsp"%>
 	<div class="d-flex justify-content-center container">
+		
 		<div class="display-content">
 			<p class="fs-2 text-center text-primary fw-bold mt-2 mb-4 heading">
 				<u>Your Orders</u>
 			</p>
-			<%if(orders!=null && !orders.isEmpty()){
-            	for(OrdersBean order:orders){
-            		String status=order.getStatus();
-            	%>
+			<%
+				if (orders != null && !orders.isEmpty()) {
+				for (OrdersBean order : orders) {
+					String status = order.getStatus();
+			%>
 			<div class="row">
 				<div class="col-lg-5 col-md-5 d-none d-lg-block">
 					<div
@@ -57,41 +59,51 @@
 						style="padding: 10px; margin-left: 35%;">
 						<div class="card-body">
 							<h5 class="card-title text-primary">
-								<b>Order ID:</b>&nbsp;<%=order.getOrderId() %></h5>
+								<b>Order ID:</b>&nbsp;<%=order.getOrderId()%></h5>
 							<p class="card-text">
 								<b class="text-dark">Order Date:</b>&nbsp;
-								<%=order.getOrderDate() %></p>
+								<%=order.getOrderDate()%></p>
 							<p class="card-text">
 								<b class="text-dark">Status:</b>&nbsp;
-								<%if(status.equals("ACCEPTED")){ %>
+								<%
+									if (status.equals("ACCEPTED")) {
+								%>
 								<span>
 									<button class="btn btn-outline-success btn-sm ms-2">
 										<span class="material-icons-outlined me-2"
 											style="float: left;"> thumb_up_alt </span> ACCEPTED
 									</button>
 								</span>
-								<%}else if(status.equals("PENDING")){ %>
+								<%
+									} else if (status.equals("PENDING")) {
+								%>
 								<span>
 									<button class="btn btn-outline-secondary btn-sm ms-2">
 										<span class="material-icons-outlined me-2"
 											style="float: left;"> pending_actions </span>Pending
 									</button>
 								</span>
-								<%}else if(status.equals("REJECTED")){ %>
+								<%
+									} else if (status.equals("REJECTED")) {
+								%>
 								<span>
 									<button class="btn btn-outline-danger btn-sm ms-2">
 										<span class="material-icons-outlined me-2"
 											style="float: left;"> thumb_down </span>Rejected
 									</button>
 								</span>
-								<%}else if(status.equals("DELIVERED")){ %>
+								<%
+									} else if (status.equals("DELIVERED")) {
+								%>
 								<span>
 									<button class="btn btn-outline-primary btn-sm ms-2">
 										<span class="material-icons-outlined me-2"
 											style="float: left;"> local_shipping </span>Delivered
 									</button>
 								</span>
-								<%} %>
+								<%
+									}
+								%>
 							</p>
 						</div>
 					</div>
@@ -103,20 +115,51 @@
 						<div class="card-body">
 							<ul class="nav position-absolute top-0 end-0 mt-5 me-2">
 								<li><span><a
-										href="<%=request.getContextPath()%>/views/particularorder.jsp?orderId=<%=order.getOrderId() %>"
-										role="button" class="btn btn-success btn-sm"><%if(role.equals("USER")){ %>View Bill<%}else{ %>Update<%} %></a></span></li>
-								<%if(status.equals("REJECTED")) {%>
-								<li><a href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>" class="btn btn-danger btn-sm ms-2">
-										<span class="material-icons-outlined me-2"
-											style="float: left;"> delete </span>Delete
-									</a></li>
-								<%} %>
+										href="<%=request.getContextPath()%>/views/particularorder.jsp?orderId=<%=order.getOrderId()%>"
+										role="button" class="btn btn-success btn-sm">
+											<%
+												if (role.equals("USER")) {
+											%>View Bill<%
+												} else {
+											%>Update<%
+												}
+											%>
+									</a></span></li>
+								<%
+									if (status.equals("REJECTED")) {
+								%>
+								<li><a
+									href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>"
+									class="btn btn-danger btn-sm ms-2"> <span
+										class="material-icons-outlined me-2" style="float: left;">
+											delete </span>Delete
+								</a></li>
+								<%
+									}
+								%>
 							</ul>
 							<h5 class="card-title text-primary">
-							<%if(role.equals("USER")){ %>
-								<b>Distributor Name: </b><%=order.getDistributorName()%><%}else{ %>
-								<b>Customer Name: </b><%=order.getUsername()%><%} %>
-							</h5>	
+								<%
+									if (role.equals("USER")) {
+								%>
+								<b>Distributor Name: </b><%=order.getDistributorName()%>
+								<%
+									} else {
+								%>
+								<b>Customer Name: </b><%=order.getUsername()%>
+								<%
+									}
+								%>
+							</h5>
+							<%
+								if (role.equals("ADMIN")) {
+							%>
+							<p class="card-text float-end mt-4">
+								<b class="text-dark">Distributor:</b>&nbsp;
+								<%=order.getDistributorName()%></p>
+							<%
+								}
+							%>
 							<p class="card-text">
 								<b class="text-dark">Total Quantity:</b>&nbsp;
 								<%=order.getTotalQuantity()%></p>
@@ -127,10 +170,12 @@
 					</div>
 				</div>
 			</div>
-			<%}}else{%>
-			<div
-				class="alert alert-danger text-center w-100 mt-5"
-				role="alert">No orders!</div>
+			<%
+				}
+			} else {
+			%>
+			<div class="alert alert-danger text-center w-100 mt-5" role="alert">No
+				orders!</div>
 
 			<%} %>
 		</div>

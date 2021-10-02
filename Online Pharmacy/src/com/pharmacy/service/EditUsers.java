@@ -42,13 +42,18 @@ public class EditUsers extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		int id=Integer.parseInt((String)request.getParameter("id"));
+		String role=(String)request.getParameter("role");
+		String username=(String)request.getParameter("username");
+		if(role==null) {
+			role=dao.getRole(username);
+		}
 		UserBean user=new UserBean();
 		user.setId(id);
-		user.setUsername((String)request.getParameter("username"));
+		user.setUsername(username);
 		user.setPhoneNumber((String)request.getParameter("phoneNumber"));
 		user.setEmail((String)request.getParameter("email"));
 		user.setPassword((String)request.getParameter("password"));
-		user.setRole((String)request.getParameter("role"));
+		user.setRole(role);
 		String result=dao.updateUser(user,id);
 		request.getSession().setAttribute("message", result);
 		response.sendRedirect("views/dashboard.jsp");

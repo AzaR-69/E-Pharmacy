@@ -40,7 +40,7 @@ public class DeleteUsers extends HttpServlet {
 			result="SUCCESS";
 		}
 		else {
-			result="FAIL";
+			result="FAILED";
 		}
 		HttpSession session=request.getSession();
 		session.setAttribute("message", result);

@@ -56,29 +56,33 @@ public class UpdateCart extends HttpServlet {
 		RequestDispatcher rd=request.getRequestDispatcher("views/cart.jsp");
 		@SuppressWarnings("unchecked")
 		List<DistributorItemBean> items=(ArrayList<DistributorItemBean>) session.getAttribute("cartList");
+		boolean redirect=false;
 		if(check.equals("update")) {
-//			for(DistributorItemBean item:items) {
-//				item.setQuantity(Integer.parseInt(values[i]));
-//				items.set(i, item);
-//				i++;
-//			}
 			items=this.updateCart(items, values);
 			session.setAttribute("cartList", items);
-			rd.forward(request, response);
+			redirect=true;
+			
 		}
 		else if(check.equals("clear")) {
 			session.setAttribute("cartList", null);
 			session.removeAttribute("category");
 			session.removeAttribute("distributor");
-			rd.forward(request, response);
+			redirect=true;
 		}
 		else if(check.equals("checkout")) {
 			items=this.updateCart(items, values);
 			session.setAttribute("cartList", items);
+			redirect=false;
+			
+		}
+		
+		if(redirect) {
+			rd.forward(request, response);
+		}
+		else {
 			rd=request.getRequestDispatcher("views/bill.jsp");
 			rd.forward(request, response);
 		}
-		
 	}
 
 }

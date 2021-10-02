@@ -175,6 +175,9 @@ public class OrdersDAO {
 		} else if (role.equals("DISTRIBUTOR")) {
 			sql = "SELECT * FROM orders WHERE distributor_name=?";
 		}
+		else if(role.equals("ADMIN")) {
+			return this.getAllOrders();
+		}
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);

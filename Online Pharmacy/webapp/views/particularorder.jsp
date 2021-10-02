@@ -158,7 +158,9 @@
 									<%
 										} else {
 									%>
-									<form action="<%=request.getContextPath()%>/UpdateOrder?orderId=<%=order.getOrderId() %>&role=<%=role %>" method="POST">
+									<form
+										action="<%=request.getContextPath()%>/UpdateOrder?orderId=<%=order.getOrderId()%>&role=<%=role%>"
+										method="POST">
 										<select class="form-select form-select-lg w-50 float-start"
 											aria-label=".form-select-lg example" name="status"
 											style="color: #6174f0" required>
@@ -167,8 +169,18 @@
 											<option value="REJECTED">Reject</option>
 											<option value="DELIVERED">Delivered</option>
 										</select>
+										<%
+											if (role.equals("ADMIN")) {
+										%>
+										<a role="button"
+											href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>"
+											class="btn btn-outline-danger btn-lg ms-1 float-end">Delete</a>
+										<%
+											}
+										%>
 										<button type="submit"
 											class="btn btn-outline-success btn-lg float-end ">Update</button>
+										
 									</form>
 									<%
 										}

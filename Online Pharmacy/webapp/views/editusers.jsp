@@ -29,11 +29,11 @@
 	response.setHeader("Pragma", "no-cache");
 	response.setHeader("Expires", "0");
 	String role = (String) session.getAttribute("role");
-	if (session.getAttribute("username") == null || session.getAttribute("role") == null || role.equals("USER")) {
+	if (session.getAttribute("username") == null || session.getAttribute("role") == null) {
 		response.sendRedirect("login.jsp");
 	} else {
 		UserDAO dao=new UserDAO();
-		UserBean user=dao.getUserById(Integer.parseInt(request.getParameter("id")));
+		UserBean user=dao.getUserByUsername((String)request.getParameter("username"));
 	%>
 	<%@include file="navbar.jsp"%>
 	<div class="d-flex justify-content-center container">
@@ -65,11 +65,13 @@
 							placeholder="Password" value="<%=user.getPassword() %>" required>
 						<label for="password">Password</label>
 					</div>
+					<%if(!role.equals("USER") && !role.equals("DISTRIBUTOR")){ %>
 					<div class="form-floating">
 						<input type="text" class="form-control" name="role"
 							placeholder="Role" value="<%=user.getRole() %>" required>
 						<label for="role">Role</label>
 					</div>
+					<%} %>
 					<div class="m-3 text-center">
 						<button type="submit" style="width: 10rem;"
 							class="btn btn-outline-success">Update User</button>

@@ -13,8 +13,9 @@ body { background-color: #e8eaf6 !important;}
 @media screen and (max-width:670px) {
     .container{
         margin-top: 25%;
+         left: 0%;
     }
-
+	
     .book-display{
         margin-left: 25%;
     }

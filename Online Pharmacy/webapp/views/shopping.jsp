@@ -9,7 +9,7 @@
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/itemslist.component.css">
+	href="${pageContext.request.contextPath}/assets/itemslist.component.css"/>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Tangerine">
 <link
@@ -42,7 +42,7 @@
 		<div class="row justify-content-center align-items-center">
 			<div class="col-lg-12 col-md-12 col-sm-12">
 				<div class="d-flex justify-content-center search-bar">
-					<h3 class="mt-2 text-center text-primary">Shop By Category</h3>
+					<h3 class="mt-2 text-center text-primary heading">Shop By Category</h3>
 				</div>
 			</div>
 			<div class="col-12 mt-5">

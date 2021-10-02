@@ -29,9 +29,9 @@ public class UserDAO {
 			ps.setString(5, user.getRole());
 			ps.setString(6, user.getName());
 			row = ps.executeUpdate();
-			result = (row > 0) ? "SUCCESS" : "FAIL";
+			result = (row > 0) ? "SUCCESS" : "FAILED";
 		} catch (Exception e) {
-			result = "FAIL";
+			result = "FAILED";
 		}
 		return result;
 
@@ -49,10 +49,11 @@ public class UserDAO {
 			ps.setString(5, user.getRole());
 			ps.setInt(6, id);
 			row = ps.executeUpdate();
-			result = (row > 0) ? "SUCCESS" : "FAIL";
+			result = (row > 0) ? "SUCCESS" : "FAILED";
 
 		} catch (Exception e) {
-			result = "FAIL";
+			e.printStackTrace();
+			result = "FAILED";
 		}
 		return result;
 
@@ -93,10 +94,10 @@ public class UserDAO {
 			ps.setString(6, oldUsername);
 			ps.setString(7, oldPassword);
 			row = ps.executeUpdate();
-			result = (row > 0) ? "SUCCESS" : "FAIL";
+			result = (row > 0) ? "SUCCESS" : "FAILED";
 
 		} catch (Exception e) {
-			result = "FAIL";
+			result = "FAILED";
 		}
 		return result;
 
@@ -110,9 +111,9 @@ public class UserDAO {
 			ps.setString(1, username);
 			ps.setString(2, password);
 			row = ps.executeUpdate();
-			result = (row > 0) ? "SUCCESS" : "FAIL";
+			result = (row > 0) ? "SUCCESS" : "FAILED";
 		} catch (Exception e) {
-			result = "FAIL";
+			result = "FAILED";
 		}
 		return result;
 	}
@@ -125,9 +126,9 @@ public class UserDAO {
 			ps.setInt(1, id);
 
 			row = ps.executeUpdate();
-			result = (row > 0) ? "SUCCESS" : "FAIL";
+			result = (row > 0) ? "SUCCESS" : "FAILED";
 		} catch (Exception e) {
-			result = "FAIL";
+			result = "FAILED";
 		}
 		return result;
 	}
@@ -173,6 +174,7 @@ public class UserDAO {
 				user.setUsername(rs.getString(3));
 				user.setEmail(rs.getString(4));
 				user.setPhoneNumber(rs.getString(5));
+				user.setPassword(rs.getString(6));
 				user.setRole(rs.getString(7));
 			}
 			return user;

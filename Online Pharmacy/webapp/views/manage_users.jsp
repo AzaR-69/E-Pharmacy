@@ -58,7 +58,7 @@
 								<td>${user.phoneNumber}</td>
 								<td>${user.role}</td>
 								<td>
-								<a role="button" href="views/editusers.jsp?id=${user.id}"
+								<a role="button" href="views/editusers.jsp?username=${user.username}"
 										class="btn btn-outline-primary btn-sm ms-3">Edit</a>
 									<a role="button" href="<%=request.getContextPath()%>/DeleteUsers?id=${user.id}"
 										class="btn btn-outline-danger btn-sm ms-2">Delete</a></td>

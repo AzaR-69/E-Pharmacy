@@ -24,8 +24,9 @@
 	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
 	response.setHeader("Expires", "0");
+	String username=(String)session.getAttribute("username");
 	String role=(String)session.getAttribute("role");
-	if(session.getAttribute("username")==null || session.getAttribute("role")==null){response.sendRedirect("login.jsp");}
+	if(username==null || session.getAttribute("role")==null){response.sendRedirect("login.jsp");}
 	else{
 	%>
 	<%@include file="navbar.jsp" %>
@@ -105,7 +106,7 @@
                     <h5 class="card-title text-center fw-bold">Edit your Profile</h5>
                     <hr>
                     <p class="text-center lead">Customize your profile, update your profile at an instant</p>
-                    <a href="" class="btn btn-custom rounded-pill w-75"><span class="text-white">Click here</span></a>
+                    <a href="<%=request.getContextPath() %>/views/editusers.jsp?username=<%=username %>" class="btn btn-custom rounded-pill w-75"><span class="text-white">Click here</span></a>
                   </div>
                 </div>
               </div>
@@ -132,9 +133,9 @@
                     <h5 class="card-title text-center fw-bold">Modify Orders</h5>
                     <hr>
                     <p class="text-center lead">Edit orders placed by customers. Add, update and delete them.</p>
-                    <a href="" class="btn btn-custom rounded-pill w-75"><span class="text-white">Click here</span></a>
+                    <a href="<%=request.getContextPath() %>/views/orders.jsp" class="btn btn-custom rounded-pill w-75"><span class="text-white">Click here</span></a>
                   </div>
-                </div>
+                </div> 
               </div>
               <%}%>
             </div>
