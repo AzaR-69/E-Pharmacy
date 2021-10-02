@@ -23,7 +23,6 @@ public class OrdersDAO {
 		popb=new ParticularProductDAO();
 	}
 	public int getOrderID(OrdersBean order) {
-		int order_id = 0;
 		sql = "SELECT * from orders where username=? and distributor_name=? and orderDate=?";
 		try {
 			con = DBUtil.getDBConn();
@@ -147,6 +146,7 @@ public class OrdersDAO {
 			result = (row > 0) ? "SUCCESS" : "FAIL";
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			result = "FAIL";
 		}
 		return result;
@@ -170,7 +170,6 @@ public class OrdersDAO {
 
 	public List<OrdersBean> getOrdersByNameAndRole(String name, String role) {
 		List<OrdersBean> orders = new ArrayList<>();
-		System.out.println(name);
 		if (role.equals("USER")) {
 			sql = "SELECT * FROM orders WHERE username=?";
 		} else if (role.equals("DISTRIBUTOR")) {

@@ -206,42 +206,45 @@ public class DistributorItemDAO {
 			return 0;
 		}	
 	}
-	
-	public int getQuantityByItemsIdAndItemName(int itemsId,String itemName) {
+	public int getQuantityByItemIdAndName(int itemsId,String itemName) {
 		sql="SELECT quantity FROM distributor_item WHERE items_id=? AND item_name=?";
 		try {
-			int quantity=0;
-			con = DBUtil.getDBConn();
-			ps = con.prepareStatement(sql);
+			con=DBUtil.getDBConn();
+			ps=con.prepareStatement(sql);
 			ps.setInt(1, itemsId);
 			ps.setString(2, itemName);
 			rs=ps.executeQuery();
 			if(rs.next()) {
-				quantity=rs.getInt("quantity");
+				row=rs.getInt("quantity");
 			}
-			return quantity;
+			return row;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
 	}
-	public int updateDistributorItemQuantity(int itemsId,String itemName,int quantity) {
-		sql="UPDATE distributor_item SET quantity=? WHERE items_id=? AND itemName=?";
+	
+	public void updateItemAfterOrder(int itemsId,String itemName,int quantity) {
+		int itemQuantity=this.getQuantityByItemIdAndName(itemsId, itemName);
+		quantity=itemQuantity-quantity;
+		sql="UPDATE distributor_item SET quantity=? WHERE items_id=? AND item_name=?";
 		try {
-			con = DBUtil.getDBConn();
-			ps = con.prepareStatement(sql);
-			int n=this.getQuantityByItemsIdAndItemName(itemsId, itemName);
-			quantity=n-quantity;
+			con=DBUtil.getDBConn();
+			ps=con.prepareStatement(sql);
 			ps.setInt(1, quantity);
 			ps.setInt(2, itemsId);
 			ps.setString(3, itemName);
 			row=ps.executeUpdate();
-			return row;
+			if(row>0) {
+				System.out.print("SUCCESS");
+			}
+			else {
+				System.out.print("FAIL");
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			return 0;
 		}
 	}
 }

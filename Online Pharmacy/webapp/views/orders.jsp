@@ -63,11 +63,11 @@
 								<%=order.getOrderDate() %></p>
 							<p class="card-text">
 								<b class="text-dark">Status:</b>&nbsp;
-								<%if(status.equals("APPROVED")){ %>
+								<%if(status.equals("ACCEPTED")){ %>
 								<span>
 									<button class="btn btn-outline-success btn-sm ms-2">
 										<span class="material-icons-outlined me-2"
-											style="float: left;"> thumb_up_alt </span> Approved
+											style="float: left;"> thumb_up_alt </span> ACCEPTED
 									</button>
 								</span>
 								<%}else if(status.equals("PENDING")){ %>

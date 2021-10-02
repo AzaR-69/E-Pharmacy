@@ -82,7 +82,7 @@
 
 										<div class="my-2">
 											<i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
-												class="text-600 text-90">Issue Date:</span>
+												class="text-600 text-90">Order Date:</span>
 											<%=order.getOrderDate()%>
 										</div>
 									</div>
@@ -163,7 +163,7 @@
 											aria-label=".form-select-lg example" name="status"
 											style="color: #6174f0" required>
 											<option selected>Update Order</option>
-											<option value="APPROVED">Accept</option>
+											<option value="ACCEPTED">Accept</option>
 											<option value="REJECTED">Reject</option>
 											<option value="DELIVERED">Delivered</option>
 										</select>

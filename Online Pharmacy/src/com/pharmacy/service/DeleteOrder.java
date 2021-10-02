@@ -1,7 +1,6 @@
 package com.pharmacy.service;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,13 +26,11 @@ public class DeleteOrder extends HttpServlet {
 		OrdersDAO orderDAO=new OrdersDAO();
 		String result="";
 		result=orderDAO.deleteOrderByID(id);
-		PrintWriter out=response.getWriter();
-		out.print(result+"/n"+id);
 		if(result.equals("SUCCESS")) {
-			response.sendRedirect(request.getContextPath()+"/views/orders.jsp");
+			response.sendRedirect("views/orders.jsp");
 		}
 		else {
-			response.getWriter().print("ERROR");
+			response.sendRedirect("views/error.jsp");
 		}
 	}
 

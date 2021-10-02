@@ -178,15 +178,11 @@ public class ItemsDAO {
 		}
 	}
 	
-	public int updateDistributorItem(String distributor, String itemName,int quantity) {
-		try {
+	public void updateDistributorItem(String distributor,List<ParticularOrderProductBean> products) {
 		int itemsId=this.getItemIdByDistributor(distributor);
-		row=this.itemDAO.updateDistributorItemQuantity(itemsId, itemName, quantity);
-		return row;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return 0;
+		System.out.println(distributor+":"+itemsId);
+		for(ParticularOrderProductBean product:products) {
+		itemDAO.updateItemAfterOrder(itemsId, product.getItemName(), product.getQuantity());
 		}
 	}
 	

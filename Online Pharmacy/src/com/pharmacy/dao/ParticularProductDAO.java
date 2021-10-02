@@ -40,12 +40,12 @@ public class ParticularProductDAO {
 			return 0;
 		}
 	}
+	
 	public int deleteItem(int orderID) {
 		sql="DELETE FROM particular_order_prod WHERE order_id=?";
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
-			
 			ps.setInt(1, orderID);
 			row=ps.executeUpdate();
 		}
@@ -54,6 +54,8 @@ public class ParticularProductDAO {
 		}
 		return row;
 	}
+	
+	
 	public String updateProductByIdAndOrderID(ParticularOrderProductBean prod) {
 		sql="UPDATE particular_order_prod set item_name=?,price=?,quantity=? WHERE id=? and order_id=?";
 		try {

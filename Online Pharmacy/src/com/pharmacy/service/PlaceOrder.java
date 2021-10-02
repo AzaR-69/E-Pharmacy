@@ -42,7 +42,7 @@ public class PlaceOrder extends HttpServlet {
 		ordersDao=new OrdersDAO();
 		itemDao=new ItemsDAO();
 	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session=request.getSession();
 		@SuppressWarnings("unchecked")
@@ -67,10 +67,9 @@ public class PlaceOrder extends HttpServlet {
 			totalQuantity+=quantity;
 			totalPrice+=price;
 			itemsId=item.getItemsId();
-			distributor=itemDao.getDistributorName(itemsId);
-			int n=itemDao.updateDistributorItem(distributor, item.getItemName(), quantity);
 			products.add(product);
 		}
+		distributor=itemDao.getDistributorName(itemsId);
 		order.setDistributorName(distributor);
 		order.setAddress(address);
 		order.setPrice(totalPrice);
