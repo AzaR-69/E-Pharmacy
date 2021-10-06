@@ -41,7 +41,6 @@ INDEX VERSION 1.131+F:\projects\java_virtusa\java_practice_project\.metadata\.pl
 3489508507.index
 2362350700.index
 4222009815.index
-1732561807.index
 1729216582.index
 1999027915.index
 197093283.index
