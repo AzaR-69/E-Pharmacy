@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.pharmacy.dao.ItemsDAO;
 import com.pharmacy.dao.UserDAO;
 
 /**
@@ -34,8 +36,15 @@ public class DeleteUsers extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String distributor=request.getParameter("username");
+		String role=dao.getRole(distributor);
 		int id=Integer.parseInt(request.getParameter("id"));
+		ItemsDAO itemDAO=new ItemsDAO();
 		String result="";
+		if(role.equals("DISTRIBUTOR")) {
+			itemDAO.deleteItemByDistributor(distributor);
+			
+		}
 		if(dao.deleteUserByUsername(id)!=null) {
 			result="SUCCESS";
 		}

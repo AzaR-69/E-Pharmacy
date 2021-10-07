@@ -5,7 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
-<link rel="stylesheet" href="../assets/dashboard.component.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/dashboard.component.css">
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Tangerine">
 <link
@@ -52,7 +52,7 @@
             <%if(role.equals("USER")){ %>
               <div class="col-md-4">
                 <div class="card shadow bg-body border-primary rounded " style="width: 25rem;">
-                  <img src="https://pharmacyjunction.com.au/wp-content/uploads/2020/11/online-pharma.jpeg" style="height: 250px;"
+                  <img src="${pageContext.request.contextPath}/assets/medicine.jpg" style="height: 250px;"
                     class="card-img-top" alt="medicine">
                   <div class="card-body text-center">
                     <h5 class="card-title text-center fw-bold">Order Medicine</h5>

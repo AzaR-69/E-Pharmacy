@@ -20,20 +20,21 @@ public class ItemsDAO {
 	private String result;
 	private int row;
 
-	public ItemsDAO(){
-		itemDAO=new DistributorItemDAO();
+	public ItemsDAO() {
+		itemDAO = new DistributorItemDAO();
 	}
-	public String addItem(DistributorItemBean distributorItem,ItemsBean item) {
-		int itemsId=this.getItemIdByDistributor(item.getDistributor());
+
+	public String addItem(DistributorItemBean distributorItem, ItemsBean item) {
+		int itemsId = this.getItemIdByDistributor(item.getDistributor());
 		System.out.println(itemsId);
 		distributorItem.setItemsId(itemsId);
-		if ( itemsId == 0) {
-				this.insertIntoItems(item);
-				distributorItem.setItemsId(this.getItemIdByDistributor(item.getDistributor()));
-				result=itemDAO.insertItem(distributorItem);
+		if (itemsId == 0) {
+			this.insertIntoItems(item);
+			distributorItem.setItemsId(this.getItemIdByDistributor(item.getDistributor()));
+			result = itemDAO.insertItem(distributorItem);
 		} else {
-			
-			result=itemDAO.insertItem(distributorItem);
+
+			result = itemDAO.insertItem(distributorItem);
 		}
 		return result;
 	}
@@ -46,23 +47,30 @@ public class ItemsDAO {
 			ps.setString(1, item.getDistributor());
 			ps.setString(2, item.getCategory());
 			ps.executeUpdate();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public String deleteItemByDistributor(String distributor) {
-		sql = "DELETE FROM items WHERE distributor=?";
-		try {
-			con = DBUtil.getDBConn();
-			ps = con.prepareStatement(sql);
-			ps.setString(1, distributor);
-			row = ps.executeUpdate();
-			result = (row > 0) ? "SUCCESS" : "FAIL";
-		} catch (Exception e) {
-			result = "FAIL";
+		String query = "DELETE FROM items WHERE distributor=?";
+		int itemsId = this.getItemIdByDistributor(distributor);
+		result = itemDAO.deleteByItemsId(itemsId);
+		if (result.equals("SUCCESS")) {
+			try {
+				con = DBUtil.getDBConn();
+				ps = con.prepareStatement(query);
+				ps.setString(1, distributor);
+				row = ps.executeUpdate();
+				result = (row > 0) ? "SUCCESS" : "FAILED";
+			} catch (Exception e) {
+				e.printStackTrace();
+				result = "FAILED";
+			}
+		}
+		else {
+			result="FAILED";
 		}
 		return result;
 	}
@@ -109,18 +117,18 @@ public class ItemsDAO {
 
 	public List<DistributorItemBean> getAllDistributorItems(String distributor) {
 		List<DistributorItemBean> items = new ArrayList<>();
-		itemDAO=new DistributorItemDAO();
-		int itemsId=this.getItemIdByDistributor(distributor);
-		items=itemDAO.getAllItems(itemsId);
-		if(items.isEmpty()) {
+		itemDAO = new DistributorItemDAO();
+		int itemsId = this.getItemIdByDistributor(distributor);
+		items = itemDAO.getAllItems(itemsId);
+		if (items.isEmpty()) {
 			return null;
 		}
 		return items;
-		
+
 	}
-	
+
 	public List<ItemsBean> getAllItems() {
-		List<ItemsBean> items=new ArrayList<ItemsBean>();
+		List<ItemsBean> items = new ArrayList<ItemsBean>();
 		sql = "SELECT * FROM items";
 		try {
 			con = DBUtil.getDBConn();
@@ -142,14 +150,14 @@ public class ItemsDAO {
 			return null;
 		}
 	}
-	
-	public int getIdByCategory(String category,String distributor) {
+
+	public int getIdByCategory(String category, String distributor) {
 		sql = "SELECT id FROM items WHERE distributor=? AND category=?";
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
 			ps.setString(1, distributor);
-			ps.setString(2,category);
+			ps.setString(2, category);
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				row = rs.getInt("id");
@@ -159,17 +167,17 @@ public class ItemsDAO {
 		}
 		return row;
 	}
-	
+
 	public String getDistributorName(int id) {
 		sql = "SELECT distributor FROM items WHERE id=?";
-		String distributor="";
+		String distributor = "";
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				distributor=rs.getString("distributor");
+				distributor = rs.getString("distributor");
 			}
 			return distributor;
 		} catch (Exception e) {
@@ -177,14 +185,13 @@ public class ItemsDAO {
 			return "";
 		}
 	}
-	
-	public void updateDistributorItem(String distributor,List<ParticularOrderProductBean> products) {
-		int itemsId=this.getItemIdByDistributor(distributor);
-		System.out.println(distributor+":"+itemsId);
-		for(ParticularOrderProductBean product:products) {
-		itemDAO.updateItemAfterOrder(itemsId, product.getItemName(), product.getQuantity());
+
+	public void updateDistributorItem(String distributor, List<ParticularOrderProductBean> products) {
+		int itemsId = this.getItemIdByDistributor(distributor);
+		System.out.println(distributor + ":" + itemsId);
+		for (ParticularOrderProductBean product : products) {
+			itemDAO.updateItemAfterOrder(itemsId, product.getItemName(), product.getQuantity());
 		}
 	}
-	
-	
+
 }

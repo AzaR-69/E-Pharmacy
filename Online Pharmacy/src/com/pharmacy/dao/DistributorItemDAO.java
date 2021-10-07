@@ -224,7 +224,21 @@ public class DistributorItemDAO {
 			return 0;
 		}
 	}
-	
+	public String deleteByItemsId(int itemsId) {
+		sql="DELETE FROM distributor_item WHERE items_id=?";
+		try {
+			con = DBUtil.getDBConn();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, itemsId);
+			row=ps.executeUpdate();
+			return (row>0)? "SUCCESS":"FAILED";
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return "FAILED";
+		}
+		
+	}
 	public void updateItemAfterOrder(int itemsId,String itemName,int quantity) {
 		int itemQuantity=this.getQuantityByItemIdAndName(itemsId, itemName);
 		quantity=itemQuantity-quantity;

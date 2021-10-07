@@ -60,7 +60,7 @@
 								<td>
 								<a role="button" href="views/editusers.jsp?username=${user.username}"
 										class="btn btn-outline-primary btn-sm ms-3">Edit</a>
-									<a role="button" href="<%=request.getContextPath()%>/DeleteUsers?id=${user.id}"
+									<a role="button" href="<%=request.getContextPath()%>/DeleteUsers?id=${user.id}&username=${user.username}"
 										class="btn btn-outline-danger btn-sm ms-2">Delete</a></td>
 							</tr>
 						</c:forEach>	
