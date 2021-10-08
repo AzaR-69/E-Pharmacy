@@ -1,0 +1,49 @@
+package com.pharmacy.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.pharmacy.model.DistributorItemBean;
+import com.pharmacy.model.ParticularOrderBean;
+import com.pharmacy.service.OrdersService;
+import com.pharmacy.service.ParticularOrderProductService;
+
+@Controller
+@Transactional
+public class OrdersController {
+
+	@Autowired
+	private OrdersService ordersService;
+	
+	@Autowired
+	private ParticularOrderProductService particularOrderService;
+	
+	@PostMapping("/orderplaced")
+	public String saveOrderDetails(HttpServletRequest request,Model model)
+	{
+		String address = request.getParameter("address");
+		String phone = request.getParameter("phone");
+		HttpSession session=request.getSession();
+		List<ParticularOrderBean> products = new ArrayList<>();
+		List<DistributorItemBean> items=(ArrayList<DistributorItemBean>) session.getAttribute("cartList");
+		System.out.println("address "+address+" phone "+phone);
+		for(DistributorItemBean item:items) {
+			ParticularOrderBean product=new ParticularOrderBean();
+			product.setItemName(item.getItemName());
+			products.add(product);
+		}
+		System.out.println(products);
+		return null;
+	}
+	
+	
+}

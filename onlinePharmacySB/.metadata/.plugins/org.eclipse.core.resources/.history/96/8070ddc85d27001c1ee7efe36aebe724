@@ -1,0 +1,30 @@
+package com.pharmacy.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.pharmacy.service.OrdersService;
+import com.pharmacy.service.ParticularOrderProductService;
+
+@Controller
+public class OrdersController {
+
+	@Autowired
+	private OrdersService ordersService;
+	
+	@Autowired
+	private ParticularOrderProductService particularOrderService;
+	
+	@PostMapping("/orderplaced")
+	public String saveOrderDetails(HttpServletRequest request,Model model)
+	{
+		
+		return null;
+	}
+	
+	
+}
