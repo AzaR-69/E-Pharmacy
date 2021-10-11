@@ -9,7 +9,9 @@ public class OrdersBean {
 	private float price;
 	private String phoneNumber;
 	private int totalQuantity;
+	private String message;
 	private String orderDate;
+	private boolean medicine;
 	private String status;
 	
 	public OrdersBean() {
@@ -77,12 +79,26 @@ public class OrdersBean {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public boolean isMedicine() {
+		return medicine;
+	}
+	public void setMedicine(boolean medicine) {
+		this.medicine = medicine;
+	}
 	@Override
 	public String toString() {
-		return "OrdersBean [order_id=" + orderId + ", username=" + username + ", distributor_name=" + distributorName
-				+ ", address=" + address + ", price=" + price + ", totalQuantity=" + totalQuantity + ", orderDate="
-				+ orderDate + ", status=" + status + "]";
+		return "OrdersBean [orderId=" + orderId + ", username=" + username + ", distributorName=" + distributorName
+				+ ", address=" + address + ", price=" + price + ", phoneNumber=" + phoneNumber + ", totalQuantity="
+				+ totalQuantity + ", message=" + message + ", orderDate=" + orderDate + ", medicine=" + medicine
+				+ ", status=" + status + "]";
 	}
+	
 	
 
 }

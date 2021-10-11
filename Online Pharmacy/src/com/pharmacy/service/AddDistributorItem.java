@@ -19,33 +19,42 @@ import com.pharmacy.dao.ItemsDAO;
 public class AddDistributorItem extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	ItemsDAO dao;
-    public AddDistributorItem() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
+
+	public AddDistributorItem() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void init() throws ServletException {
-		dao=new ItemsDAO();
+		dao = new ItemsDAO();
 		super.init();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DistributorItemBean item=new DistributorItemBean();
-		ItemsBean i=new ItemsBean();
-		i.setDistributor((String)request.getSession().getAttribute("username"));
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String role = (String) session.getAttribute("role");
+		DistributorItemBean item = new DistributorItemBean();
+		ItemsBean i = new ItemsBean();
+		if (role.equals("ADMIN")) {
+			i.setDistributor(request.getParameter("distributor"));
+		} else {
+			i.setDistributor((String) request.getSession().getAttribute("username"));
+		}
 		i.setCategory(request.getParameter("category"));
 		item.setItemName(request.getParameter("itemName"));
 		item.setDescription(request.getParameter("description"));
 		item.setPrice(Float.parseFloat(request.getParameter("price")));
 		item.setQuantity(Integer.parseInt(request.getParameter("quantity")));
-		String result=dao.addItem(item,i);
-		HttpSession session=request.getSession();
+		String result = dao.addItem(item, i);
+
 		session.setAttribute("message", result);
 		response.sendRedirect("views/items.jsp");
 	}

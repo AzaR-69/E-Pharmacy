@@ -84,6 +84,13 @@
 				<div class="card-body">
 					<form action="<%=request.getContextPath()%>/AddDistributorItem"
 						method="POST">
+						<%if(role.equals("ADMIN")){ %>
+							<div class="form-floating">
+							<input type="text" class="form-control" name="distributor"
+								placeholder="Distributor" required> <label
+								for="distributor">Distributor Name</label>
+						</div>
+						<%}%>
 						<div class="form-floating">
 							<input type="text" class="form-control" name="itemName"
 								placeholder="itemName" required> <label for="itemName">Item
@@ -94,6 +101,7 @@
 								placeholder="Description" required> <label
 								for="description">Description</label>
 						</div>
+						
 						<div class="form-floating">
 							<input type="number" step="any" class="form-control" name="price"
 								placeholder="Product Price" required> <label for="price">Product

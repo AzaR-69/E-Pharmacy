@@ -77,6 +77,8 @@ public class PlaceOrder extends HttpServlet {
 		order.setPhoneNumber(phone);
 		order.setUsername(username);
 		order.setOrderDate(date);
+		order.setMedicine(false);
+		order.setMessage("Order Placed, Pending approval");
 		order.setStatus("PENDING");
 		String result=ordersDao.addOrder(order, products);
 		if(result.equals("SUCCESS")) {

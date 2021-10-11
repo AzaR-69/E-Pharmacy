@@ -25,8 +25,31 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+<script>
+	function orders() {
+		document.getElementById("orders").style.display = "block"
+		document.getElementById("buttonCard").style.display = "none"
+	}
+	function revert() {
+		document.getElementById("orders").style.display = "none"
+		document.getElementById("buttonCard").style.display = "block"
+	}
+</script>
+<style>
+#buttonCard {
+	margin-top: 20%;
+	margin-left: 45%;
+}
+
+@media screen and (max-width:670px) {
+	#buttonCard {
+		margin-top: 40%;
+		margin-left: 0%;
+	}
+}
+</style>
 </head>
-<body> 
+<body>
 	<%
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
@@ -42,8 +65,27 @@
 
 	<%@include file="navbar.jsp"%>
 	<div class="d-flex justify-content-center container">
-		
-		<div class="display-content">
+		<%
+			if (!role.equals("USER")) {
+		%>
+		<div
+			class="card bg-light border-primary shadow rounded text-center choose-block"
+			style="height: 15rem;" id="buttonCard">
+			<h3 class="card-header text-primary"
+				style="text-align: center; font-weight: bold;">Choose an option</h3>
+			<div class="card-body">
+				<a href="<%=request.getContextPath()%>/views/medicinerequest.jsp"
+					role="button" class="btn btn-primary col-11 mt-4">View Medicine
+					Requests</a>
+				<button type="button" class="btn btn-primary col-11 mt-3"
+					onclick="orders()">Your Orders</button>
+			</div>
+		</div>
+		<%
+			}
+		%>
+		<div class="display-content" <%if (!role.equals("USER")) {%>
+			style="display: none;" <%}%> id="orders">
 			<p class="fs-2 text-center text-primary fw-bold mt-2 mb-4 heading">
 				<u>Your Orders</u>
 			</p>
@@ -51,6 +93,7 @@
 				if (orders != null && !orders.isEmpty()) {
 				for (OrdersBean order : orders) {
 					String status = order.getStatus();
+					if(order.getDistributorName()==null) order.setDistributorName("PENDING");
 			%>
 			<div class="row">
 				<div class="col-lg-5 col-md-5 d-none d-lg-block">
@@ -116,20 +159,19 @@
 							<ul class="nav position-absolute top-0 end-0 mt-5 me-2">
 								<li><span><a
 										href="<%=request.getContextPath()%>/views/particularorder.jsp?orderId=<%=order.getOrderId()%>"
-										role="button" class="btn btn-success btn-sm">
-											<%
-												if (role.equals("USER")) {
-											%>View Bill<%
-												} else {
-											%>Update<%
-												}
-											%>
+										role="button" class="btn btn-success btn-sm"> <%
+ 							if (role.equals("USER")) {
+										 %>View Bill<%
+ 							} else {
+ 										%>Update<%
+ 								}
+ 								%>
 									</a></span></li>
 								<%
 									if (status.equals("REJECTED")) {
 								%>
 								<li><a
-									href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>"
+									href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>&medicine=<%=order.isMedicine()%>"
 									class="btn btn-danger btn-sm ms-2"> <span
 										class="material-icons-outlined me-2" style="float: left;">
 											delete </span>Delete
@@ -161,11 +203,11 @@
 								}
 							%>
 							<p class="card-text">
-								<b class="text-dark">Total Quantity:</b>&nbsp;
-								<%=order.getTotalQuantity()%></p>
-							<p class="card-text">
 								<b class="text-dark">Total Price:</b>&nbsp;
 								<%=order.getPrice()%></p>
+							<p class="card-text">
+								<b class="text-dark">Status:</b>&nbsp;
+								<%=order.getMessage()%></p>
 						</div>
 					</div>
 				</div>
@@ -177,9 +219,13 @@
 			<div class="alert alert-danger text-center w-100 mt-5" role="alert">No
 				orders!</div>
 
-			<%} %>
+			<%
+				}
+			%>
 		</div>
 	</div>
-	<%} %>
+	<%
+		}
+	%>
 </body>
 </html>

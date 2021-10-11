@@ -59,6 +59,7 @@ body {
 					<%
 						if (!items.isEmpty()) {
 						for (ItemsBean item : items) {
+							if(!item.getCategory().equals("Medications")){
 					%>
 
 					<div class="col-lg-3 col-md-6 col-sm-12">
@@ -77,20 +78,13 @@ body {
 												src="${pageContext.request.contextPath}/assets/supplies.jpg"
 												class="ms-2" style="width: 15rem; height: 10rem;">
 											<%
-												} else if (item.getCategory().equals("Toiletries")) {
+												} else if(item.getCategory().equals("Toiletries")) {
 											%>
 											<img
 												src="${pageContext.request.contextPath}/assets/toiletries.jfif"
 												class="ms-2" style="width: 15rem; height: 10rem;">
 											<%
-												} else {
-											%>
-											<img
-												src="${pageContext.request.contextPath}/assets/medications.jpg"
-												class="ms-2" style="width: 15rem; height: 10rem;">
-											<%
-												}
-											%>
+												}%>
 											<div class="data p-4">
 												<span class="fw-bold text-secondary">Distributor:</span> <span><%=item.getDistributor()%></span><br>
 											</div>
@@ -106,7 +100,7 @@ body {
 						</div>
 					</div>
 					<%
-						}
+						}}
 					}
 					%>
 

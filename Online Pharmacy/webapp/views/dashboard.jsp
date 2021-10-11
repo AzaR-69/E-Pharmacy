@@ -60,7 +60,7 @@
                     <p class="text-center lead">
                       <span>Our strong network lets us deliver medicines to almost everywhere</span>
                     </p>
-                    <a href="<%=request.getContextPath()%>/views/shopping.jsp" class="btn btn-custom rounded-pill w-75"><span class="text-white">Click here</span></a>
+                    <a href="<%=request.getContextPath()%>/views/producttype.jsp" class="btn btn-custom rounded-pill w-75"><span class="text-white">Click here</span></a>
                   </div>
                 </div>
               </div>
@@ -84,7 +84,7 @@
               	<div class="col-md-4">
                 <div class="card shadow bg-body border-primary rounded " style="width: 25rem;">
                   <img
-                    src="https://www.supply-chain.gr/wp-content/uploads/2020/06/1-3.jpg"
+                    src="${pageContext.request.contextPath}/assets/orders.jpg"
                     class="card-img-top"  style="height: 250px;" alt="View Order">
                   <div class="card-body text-center">
                     <h5 class="card-title text-center fw-bold">Your Orders</h5>

@@ -1,5 +1,7 @@
 package com.pharmacy.dao;
 
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +11,7 @@ import java.util.List;
 import com.pharmacy.bean.OrdersBean;
 import com.pharmacy.bean.ParticularOrderProductBean;
 import com.pharmacy.util.DBUtil;
+import javax.servlet.http.Part;
 
 public class OrdersDAO {
 	private String sql;
@@ -18,10 +21,32 @@ public class OrdersDAO {
 	private String result;
 	private int row;
 	ParticularProductDAO popb;
-	
+
 	public OrdersDAO() {
-		popb=new ParticularProductDAO();
+		popb = new ParticularProductDAO();
 	}
+
+	public int orderMedicine(OrdersBean order, InputStream prescription) {
+		sql = "INSERT INTO orders (username,orderDate,address,phone_number,status,prescription,medicine,message) VALUES (?,?,?,?,?,?,?,?)";
+		try {
+			con = DBUtil.getDBConn();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, order.getUsername());
+			ps.setString(2, order.getOrderDate());
+			ps.setString(3, order.getAddress());
+			ps.setString(4, order.getPhoneNumber());
+			ps.setString(5, order.getStatus());
+			ps.setBlob(6, prescription);
+			ps.setBoolean(7, true);
+			ps.setString(8, order.getMessage());
+			row = ps.executeUpdate();
+			return row;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
 	public int getOrderID(OrdersBean order) {
 		sql = "SELECT * from orders where username=? and distributor_name=? and orderDate=?";
 		try {
@@ -40,8 +65,28 @@ public class OrdersDAO {
 		return 0;
 	}
 
+	public byte[] getPrescriptionById(int orderId) {
+		Blob image = null;
+		byte[] img = null;
+		sql = "SELECT prescription FROM orders WHERE order_id=?";
+		try {
+			con = DBUtil.getDBConn();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, orderId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				image = rs.getBlob(1);
+				img = image.getBytes(1, (int) image.length());
+			}
+			return img;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public String addOrder(OrdersBean order, List<ParticularOrderProductBean> products) {
-		sql = "INSERT INTO orders (username,orderDate,total_quantity,price,address,distributor_name,status,phone_number) VALUES (?,?,?,?,?,?,?,?)";
+		sql = "INSERT INTO orders (username,orderDate,total_quantity,price,address,distributor_name,status,phone_number,medicine,message) VALUES (?,?,?,?,?,?,?,?,?,?)";
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
@@ -53,6 +98,8 @@ public class OrdersDAO {
 			ps.setString(6, order.getDistributorName());
 			ps.setString(7, order.getStatus());
 			ps.setString(8, order.getPhoneNumber());
+			ps.setBoolean(9,order.isMedicine());
+			ps.setString(10, order.getMessage());
 			int productRow = 0;
 			row = ps.executeUpdate();
 			if (row > 0) {
@@ -89,6 +136,8 @@ public class OrdersDAO {
 				order.setAddress(rs.getString("address"));
 				order.setDistributorName(rs.getString("distributor_name"));
 				order.setStatus(rs.getString("status"));
+				order.setMedicine(rs.getBoolean("medicine"));
+				order.setMessage(rs.getString("message"));
 				order.setPhoneNumber(rs.getString("phone_number"));
 				orders.add(order);
 			}
@@ -120,6 +169,8 @@ public class OrdersDAO {
 				order.setAddress(rs.getString("address"));
 				order.setDistributorName(rs.getString("distributor_name"));
 				order.setStatus(rs.getString("status"));
+				order.setMedicine(rs.getBoolean("medicine"));
+				order.setMessage(rs.getString("message"));
 				order.setPhoneNumber(rs.getString("phone_number"));
 				orders.add(order);
 			}
@@ -133,16 +184,19 @@ public class OrdersDAO {
 		}
 	}
 
-	public String deleteOrderByID(int orderid) {
+	public String deleteOrderByID(int orderid, boolean isMedicine) {
 		sql = "DELETE FROM orders WHERE order_id=?";
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, orderid);
-			row = popb.deleteItem(orderid);
-			if (row>0) {
-				row=ps.executeUpdate();
+			if (!isMedicine) {
+				row = popb.deleteItem(orderid);
+				if (row > 0) {
+					row = ps.executeUpdate();
+				}
 			}
+			else {row = ps.executeUpdate();}
 			result = (row > 0) ? "SUCCESS" : "FAIL";
 
 		} catch (Exception e) {
@@ -152,13 +206,34 @@ public class OrdersDAO {
 		return result;
 	}
 
-	public String updateOrder(int orderID,String status) {
-		sql = "UPDATE orders set status=? WHERE order_id=?";
+	public String updateOrder(int orderID, String message, String status) {
+		sql = "UPDATE orders set status=?,message=? WHERE order_id=?";
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
 			ps.setString(1, status);
-			ps.setInt(2, orderID);
+			ps.setString(2, message);
+			ps.setInt(3, orderID);
+			row = ps.executeUpdate();
+			result = (row > 0) ? "SUCCESS" : "FAIL";
+		} catch (Exception e) {
+			result = "FAIL";
+		}
+		return result;
+
+	}
+
+	public String updateOrderBean(OrdersBean order) {
+		sql = "UPDATE orders set distributor_name=?,total_quantity=?,price=?,message=?,status=? WHERE order_id=?";
+		try {
+			con = DBUtil.getDBConn();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, order.getDistributorName());
+			ps.setInt(2, order.getTotalQuantity());
+			ps.setFloat(3, order.getPrice());
+			ps.setString(4, order.getMessage());
+			ps.setString(5, order.getStatus());
+			ps.setInt(6, order.getOrderId());
 			row = ps.executeUpdate();
 			result = (row > 0) ? "SUCCESS" : "FAIL";
 		} catch (Exception e) {
@@ -174,8 +249,7 @@ public class OrdersDAO {
 			sql = "SELECT * FROM orders WHERE username=?";
 		} else if (role.equals("DISTRIBUTOR")) {
 			sql = "SELECT * FROM orders WHERE distributor_name=?";
-		}
-		else if(role.equals("ADMIN")) {
+		} else if (role.equals("ADMIN")) {
 			return this.getAllOrders();
 		}
 		try {
@@ -193,6 +267,8 @@ public class OrdersDAO {
 				order.setAddress(rs.getString("address"));
 				order.setDistributorName(rs.getString("distributor_name"));
 				order.setStatus(rs.getString("status"));
+				order.setMedicine(rs.getBoolean("medicine"));
+				order.setMessage(rs.getString("message"));
 				order.setPhoneNumber(rs.getString("phone_number"));
 				orders.add(order);
 			}
@@ -208,14 +284,14 @@ public class OrdersDAO {
 	}
 
 	public OrdersBean getOrderByOrderID(int orderId) {
-		sql="SELECT * FROM orders WHERE order_id=?";
-		OrdersBean order=new OrdersBean();
+		sql = "SELECT * FROM orders WHERE order_id=?";
+		OrdersBean order = new OrdersBean();
 		try {
 			con = DBUtil.getDBConn();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, orderId);
 			rs = ps.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				order.setOrderId(rs.getInt("order_id"));
 				order.setUsername(rs.getString("username"));
 				order.setOrderDate(rs.getString("orderDate"));
@@ -224,14 +300,15 @@ public class OrdersDAO {
 				order.setAddress(rs.getString("address"));
 				order.setDistributorName(rs.getString("distributor_name"));
 				order.setStatus(rs.getString("status"));
+				order.setMedicine(rs.getBoolean("medicine"));
+				order.setMessage(rs.getString("message"));
 				order.setPhoneNumber(rs.getString("phone_number"));
 			}
-			
+
 			return order;
-		}	
-			catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

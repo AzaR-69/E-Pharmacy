@@ -1,3 +1,4 @@
+<%@page import="java.io.OutputStream"%>
 <%@page import="com.pharmacy.bean.OrdersBean"%>
 <%@page import="com.pharmacy.dao.OrdersDAO"%>
 <%@page import="com.pharmacy.bean.ParticularOrderProductBean"%>
@@ -26,6 +27,20 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+<style>
+label {
+	font-weight: bold;
+	color: #6174f0;
+}
+#prescription{
+	width:400px; height:400px; margin-left:25%;
+}
+@media screen and (max-width:670px) {
+	#prescription{
+	width:300px; height:300px; margin-left:0%;
+}
+}
+</style>
 </head>
 <body>
 	<%
@@ -98,6 +113,12 @@
 									<div class="col-2">Amount</div>
 								</div>
 								<%
+									if (order.isMedicine()) {
+								%>
+								<img class="text-center border border-secondary mt-2"
+									src="<%=request.getContextPath()%>/ShowPrescription?orderId=<%=order.getOrderId()%>" id="prescription" />
+
+								<%}
 									if (products != null) {
 									for (ParticularOrderProductBean product : products) {
 								%>
@@ -158,10 +179,10 @@
 									<%
 										} else {
 									%>
-									<form
+									<form class="form-inline"
 										action="<%=request.getContextPath()%>/UpdateOrder?orderId=<%=order.getOrderId()%>&role=<%=role%>"
 										method="POST">
-										<select class="form-select form-select-lg w-50 float-start"
+										<select class="form-select form-select-lg w-50"
 											aria-label=".form-select-lg example" name="status"
 											style="color: #6174f0" required>
 											<option selected>Update Order</option>
@@ -169,18 +190,39 @@
 											<option value="REJECTED">Reject</option>
 											<option value="DELIVERED">Delivered</option>
 										</select>
+										<div class="form-floating w-50">
+											<input type="text" class="form-control" name="message"
+												placeholder="Message" value="<%=order.getMessage()%>"
+												required> <label for="message">Status</label>
+										</div>
 										<%
-											if (role.equals("ADMIN")) {
+											if (order.isMedicine()) {
+										%>
+										<br>
+										<div class="form-floating w-50 float-end">
+											<input type="number" class="form-control" name="quantity"
+												placeholder="Quantity" value="<%=order.getTotalQuantity()%>"
+												required> <label for="quantity">Quantity</label>
+										</div>
+										<div class="form-floating w-50">
+											<input type="number" class="form-control" name="price"
+												placeholder="Price" value="<%=order.getPrice()%>" required>
+											<label for="price">Price</label>
+										</div>
+										<br>
+										<%
+											}
+										if (role.equals("ADMIN")) {
 										%>
 										<a role="button"
-											href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>"
+											href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>&medicine=<%=order.isMedicine()%>"
 											class="btn btn-outline-danger btn-lg ms-1 float-end">Delete</a>
 										<%
 											}
 										%>
 										<button type="submit"
 											class="btn btn-outline-success btn-lg float-end ">Update</button>
-										
+
 									</form>
 									<%
 										}
@@ -193,6 +235,8 @@
 			</div>
 		</div>
 	</div>
-	<%} %>
+	<%
+		}
+	%>
 </body>
 </html>

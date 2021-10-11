@@ -26,7 +26,6 @@ public class ItemsDAO {
 
 	public String addItem(DistributorItemBean distributorItem, ItemsBean item) {
 		int itemsId = this.getItemIdByDistributor(item.getDistributor());
-		System.out.println(itemsId);
 		distributorItem.setItemsId(itemsId);
 		if (itemsId == 0) {
 			this.insertIntoItems(item);

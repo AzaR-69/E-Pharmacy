@@ -23,9 +23,10 @@ public class DeleteOrder extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id=Integer.parseInt(request.getParameter("id"));
+		boolean isMedicine=Boolean.parseBoolean(request.getParameter("medicine"));
 		OrdersDAO orderDAO=new OrdersDAO();
 		String result="";
-		result=orderDAO.deleteOrderByID(id);
+		result=orderDAO.deleteOrderByID(id,isMedicine);
 		if(result.equals("SUCCESS")) {
 			response.sendRedirect("views/orders.jsp");
 		}
