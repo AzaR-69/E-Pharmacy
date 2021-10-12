@@ -1,3 +1,0 @@
-INDEX VERSION 1.131
-F:\projects\java_virtusa\java_practice_project\onlinePharmacySB\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1389814736.index
-\onlinePharmacySB\src\main\java
