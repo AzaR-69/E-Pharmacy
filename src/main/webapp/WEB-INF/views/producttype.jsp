@@ -49,7 +49,7 @@
 				<h3 class="card-header text-primary"
 					style="text-align: center; font-weight: bold;">Order Medicine</h3>
 				<div class="card-body">
-					<form action="" method="POST" enctype="multipart/form-data">
+					<form action="${pageContext.request.contextPath}/fileUpload" method="POST" enctype="multipart/form-data">
 						<div class="m-3">
 							<label for="prescription" class="form-label">Upload
 								Prescription</label> <input class="form-control" type="file"

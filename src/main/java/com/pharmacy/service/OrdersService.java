@@ -51,6 +51,26 @@ public class OrdersService {
 		else
 			return "not inserted";
 	}
+	public String addFile(OrdersBean order)
+	{
+		OrdersBean orderBean = this.ordersRepo.save(order);
+		
+		if(orderBean != null)
+			return "SUCCESS";
+		else
+			return "not inserted";
+	}
+	public List<OrdersBean> getOrdersByDate(String date){
+		System.out.println("Hello bro i am in date of orders ");
+		List<OrdersBean> orders = this.ordersRepo.findByOrderDate(date);
+		// System.out.println("orders of date "+orders);
+		return orders;
+	}
+	
+	public List<OrdersBean> getOrdersByDistributor(String distributorName){
+		return ordersRepo.findByDistributorName(distributorName);
+	}
+	
 	public List<OrdersBean> getAllOrders()
 	{
 		return this.ordersRepo.findAll();

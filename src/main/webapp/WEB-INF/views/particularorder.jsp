@@ -25,6 +25,8 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+<script 
+	src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 <style>
 label {
 	font-weight: bold;
@@ -41,6 +43,25 @@ label {
 </style>	
 </head>
 <body>
+<script>
+window.onload = function () {
+    document.getElementById("download")
+        .addEventListener("click", () => {
+            const invoice = this.document.getElementById("cart-card");
+            console.log(invoice);
+            console.log("window"+window);
+             var opt = {
+                margin: [30,40,3,4],
+                filename: 'myBill.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 5 },
+                
+                jsPDF: { unit: 'mm',format: 'letter',orientation:'l' }
+            };
+            html2pdf().from(invoice).set(opt).save();
+        })
+}
+</script>
 	<%
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
@@ -112,7 +133,7 @@ label {
 									if(order.getMessage()==null){order.setMessage("PENDING");}
 									if (order.isMedicine()) {
 								%>
-								<img class="text-center border border-secondary mt-2" src=""
+								<img class="text-center border border-secondary mt-2" src="data:image/png;base64,${order.base64Image}"
 									id="prescription" />
 								<%}
 									if (products != null) {
@@ -224,6 +245,7 @@ label {
 									<%
 										}
 									%>
+									<button class="btn btn-primary float-end" id="download"> Download as PDF</button>
 								</div>
 							</div>
 						</div>

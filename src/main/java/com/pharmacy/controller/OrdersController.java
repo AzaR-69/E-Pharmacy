@@ -1,32 +1,33 @@
 package com.pharmacy.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pharmacy.model.DistributorItemBean;
 import com.pharmacy.model.ItemsBean;
 import com.pharmacy.model.OrdersBean;
 import com.pharmacy.model.ParticularOrderBean;
-import com.pharmacy.model.UserBean;
 import com.pharmacy.service.ItemsService;
 import com.pharmacy.service.OrdersService;
 import com.pharmacy.service.ParticularOrderProductService;
@@ -93,19 +94,21 @@ public class OrdersController {
 		model.addAttribute("message", "SUCCESS");
 		return new ModelAndView("dashboard");
 	}
-
+	
+    
 	@PostMapping("/UpdateOrder/{id}/{medicine}")
 	public ModelAndView updateOrderStatus(@PathVariable("id") int id, @PathVariable("medicine") boolean medicine,
 			HttpServletRequest request, Model model) {
-		System.out.println("In update order");
+		System.out.println("check"+medicine);
 		String role = (String) request.getSession().getAttribute("role");
 		String status = request.getParameter("status");
 		String message = request.getParameter("message");
 		String username = (String) request.getSession().getAttribute("username");
-		if (medicine) {
+		OrdersBean order=ordersService.getOrderByOrdeId(id);
+		if (medicine && role.equals("DISTRIBUTOR") ) {
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
 			float price = Float.parseFloat(request.getParameter("price"));
-			OrdersBean order=new OrdersBean();
+			//OrdersBean order=new OrdersBean();
 			order.setStatus(status);
 			order.setMessage(message);
 			order.setTotalQuantity(quantity);
@@ -180,5 +183,65 @@ public class OrdersController {
 		return new ModelAndView("order-success");
 
 	}
-
+	
+	@PostMapping("/fileUpload")
+    public ModelAndView saveFile(HttpServletRequest request, Model model,@RequestParam("prescription") MultipartFile prescription) throws IOException 
+    {
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		String address = request.getParameter("address");
+		String phone = request.getParameter("phone");
+		String date=LocalDate.now().toString();
+		
+		byte[] image = prescription.getBytes();
+		OrdersBean order = new OrdersBean();
+		order.setAddress(address);
+		order.setPhoneNumber(phone);
+		order.setUsername(username);
+		order.setOrderDate(date);
+		order.setStatus("PENDING");
+		order.setMessage("Order Placed, pending approval");
+		order.setMedicine(true);
+		order.setPrescription(image);
+		//  xftaorder.setDistributorName(null);
+		ordersService.addFile(order);
+		model.addAttribute("message", "SUCCESS");
+		return new ModelAndView("order-success");
+		
+    }
+    
+	@GetMapping("/pdfConvert")
+	public void pdfConvert(HttpServletResponse response) throws DocumentException, IOException, com.itextpdf.text.DocumentException
+	{
+		response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+        List<OrdersBean> listOrders = this.ordersService.getAllOrders();
+        OrderPDFExporter exporter = new OrderPDFExporter(listOrders);
+        exporter.export(response);
+	}
+	
+	@PostMapping("/pdfConvertByDate")
+	public void pdfConvertByDate(@RequestParam("role") String role,HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException, com.itextpdf.text.DocumentException
+	{
+		System.out.println(role);
+		String date = request.getParameter("date");
+		System.out.println("Date "+date);
+	
+//		System.out.println("date products "+this.ordersService.getOrdersByDate(date));
+		response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+        List<OrdersBean> listOrders = 	this.ordersService.getOrdersByDate(date);;
+        OrderPDFExporter exporter = new OrderPDFExporter(listOrders);
+        exporter.export(response);
+	}
 }

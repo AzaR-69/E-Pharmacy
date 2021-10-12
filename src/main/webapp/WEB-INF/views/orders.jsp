@@ -51,22 +51,24 @@
 </head>
 <body>
 	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
 	response.setHeader("Expires", "0");
 	String token = (String) session.getAttribute("token");
 	String username = (String) session.getAttribute("username");
-	
+	String role=(String)session.getAttribute("role");
+
 	if (username == null || token == null) {
 		response.sendRedirect("login");
 	} else {
-		List<OrdersBean> orders = (List<OrdersBean>)request.getAttribute("orders");
+		List<OrdersBean> orders = (List<OrdersBean>) request.getAttribute("orders");
 	%>
 
 	<%@include file="navbar.jsp"%>
 	<div class="d-flex justify-content-center container">
+
 		<%
-			if (!token.contains("USER")) {
+		if (!token.contains("USER")) {
 		%>
 		<div
 			class="card bg-light border-primary shadow rounded text-center choose-block"
@@ -82,7 +84,7 @@
 			</div>
 		</div>
 		<%
-			}
+		}
 		%>
 		<div class="display-content" <%if (!token.contains("USER")) {%>
 			style="display: none;" <%}%> id="orders">
@@ -90,10 +92,11 @@
 				<u>Your Orders</u>
 			</p>
 			<%
-				if (orders != null && !orders.isEmpty()) {
+			if (orders != null && !orders.isEmpty()) {
 				for (OrdersBean order : orders) {
 					String status = order.getStatus();
-					if(order.getDistributorName()==null) order.setDistributorName("PENDING");
+					if (order.getDistributorName() == null)
+				order.setDistributorName("PENDING");
 			%>
 			<div class="row">
 				<div class="col-lg-5 col-md-5 d-none d-lg-block">
@@ -109,7 +112,7 @@
 							<p class="card-text">
 								<b class="text-dark">Status:</b>&nbsp;
 								<%
-									if (status.equals("ACCEPTED")) {
+								if (status.equals("ACCEPTED")) {
 								%>
 								<span>
 									<button class="btn btn-outline-success btn-sm ms-2">
@@ -118,7 +121,7 @@
 									</button>
 								</span>
 								<%
-									} else if (status.equals("PENDING")) {
+								} else if (status.equals("PENDING")) {
 								%>
 								<span>
 									<button class="btn btn-outline-secondary btn-sm ms-2">
@@ -127,7 +130,7 @@
 									</button>
 								</span>
 								<%
-									} else if (status.equals("REJECTED")) {
+								} else if (status.equals("REJECTED")) {
 								%>
 								<span>
 									<button class="btn btn-outline-danger btn-sm ms-2">
@@ -136,7 +139,7 @@
 									</button>
 								</span>
 								<%
-									} else if (status.equals("DELIVERED")) {
+								} else if (status.equals("DELIVERED")) {
 								%>
 								<span>
 									<button class="btn btn-outline-primary btn-sm ms-2">
@@ -145,7 +148,7 @@
 									</button>
 								</span>
 								<%
-									}
+								}
 								%>
 							</p>
 						</div>
@@ -159,16 +162,17 @@
 							<ul class="nav position-absolute top-0 end-0 mt-5 me-2">
 								<li><span><a
 										href="${pageContext.request.contextPath}/particularOrder/<%=order.getOrderId()%>"
-										role="button" class="btn btn-success btn-sm"> <%
-												if (token.contains("USER")) {
-											%>View Bill<%
-												} else {
-											%>Update<%
-												}
-											%>
+										role="button" class="btn btn-success btn-sm"> 
+										<%
+										 if (token.contains("USER")) {
+									 	%>View Bill<%
+ 										} else {
+ 										%>Update<%
+ 										}
+ 										%>
 									</a></span></li>
 								<%
-									if (status.equals("REJECTED")) {
+								if (status.equals("REJECTED")) {
 								%>
 								<li><a
 									href="<%=request.getContextPath()%>/DeleteOrder?id=<%=order.getOrderId()%>&medicine=<%=order.isMedicine()%>"
@@ -177,30 +181,30 @@
 											delete </span>Delete
 								</a></li>
 								<%
-									}
+								}
 								%>
 							</ul>
 							<h5 class="card-title text-primary">
 								<%
-									if (token.contains("USER")) {
+								if (token.contains("USER")) {
 								%>
 								<b>Distributor Name: </b><%=order.getDistributorName()%>
 								<%
-									} else {
+								} else {
 								%>
 								<b>Customer Name: </b><%=order.getUsername()%>
 								<%
-									}
+								}
 								%>
 							</h5>
 							<%
-								if (token.contains("ADMIN")) {
+							if (token.contains("ADMIN")) {
 							%>
 							<p class="card-text float-end mt-4">
 								<b class="text-dark">Distributor:</b>&nbsp;
 								<%=order.getDistributorName()%></p>
 							<%
-								}
+							}
 							%>
 							<p class="card-text">
 								<b class="text-dark">Total Price:</b>&nbsp;
@@ -213,15 +217,31 @@
 				</div>
 			</div>
 			<%
-				}
+			}
 			} else {
 			%>
 			<div class="alert alert-danger text-center w-100 mt-5" role="alert">No
 				orders!</div>
 
-			<%} %>
+			<%
+			}
+			%>
+			<%
+			if (token.contains("ADMIN") || token.contains("DISTRIBUTOR")) {
+			%>
+			<form action="/pdfConvertByDate&role=<%=role %>" class="form-inline" method="post">
+				<input type="date" name="date" class="form-control"> <label
+					for="date">Download by date</label> <input type="submit"
+					value="Download by Date" class="btn btn-secondary">
+			</form>
+			<a href="/pdfConvert" class="btn btn-primary">Export to PDF</a>
+			<%
+			}
+			%>
 		</div>
 	</div>
-	<%} %>
+	<%
+	}
+	%>
 </body>
 </html>

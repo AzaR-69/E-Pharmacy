@@ -1,5 +1,6 @@
 package com.pharmacy.model;
 
+import java.util.Base64;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity(name = "orders")
 public class OrdersBean {
@@ -21,7 +23,7 @@ public class OrdersBean {
 	private int orderId;
 	@Column(nullable = false)
 	private String username;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String distributorName;
 	private String address;
 	private float price;
@@ -38,6 +40,20 @@ public class OrdersBean {
 	private boolean medicine;
 	@Column(length=50)
 	private String message;
+	@Transient
+	private String base64Image;
+	
+	
+
+	public String getBase64Image() {
+		  base64Image = Base64.getEncoder().encodeToString(this.prescription);
+		  return base64Image;
+	}
+
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
+	}
+
 
 	public OrdersBean(int orderId, String username, String distributorName, String address, float price,
 			String phoneNumber, int totalQuantity, String orderDate, String status, List<ParticularOrderBean> partProds,

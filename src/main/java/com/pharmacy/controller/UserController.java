@@ -1,9 +1,13 @@
 package com.pharmacy.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +40,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -50,15 +51,18 @@ public class UserController {
 	JwtUtil jwtUtil;
 
 	@PostMapping("/authenticate")
-	public ModelAndView authenticateUser(@ModelAttribute("user") LoginBean user, HttpServletRequest request) {
+	public ModelAndView authenticateUser(@ModelAttribute("user") LoginBean user, HttpServletRequest request,HttpServletResponse response) throws IOException {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		System.out.println("ROLE:"+authentication.getAuthorities());
+		HttpSession session=request.getSession();
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtil.generateJwtToken(authentication);
-		request.getSession().setAttribute("username", user.getUsername());
+		session.setAttribute("username", user.getUsername());
+		response.setHeader("Authorization", "Bearer "+jwt);
+		session.setAttribute("Authorization", "Bearer "+jwt);
 		try {
-			request.getSession().setAttribute("token", userService.decodeToken(jwt));
+			session.setAttribute("token", userService.decodeToken(jwt));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

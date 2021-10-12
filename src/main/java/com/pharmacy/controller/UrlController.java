@@ -90,9 +90,11 @@ public class UrlController {
 		model.addAttribute("items",items);
 		return "shopping";
 	}
-	
-	@GetMapping("/dashboard")
-	public ModelAndView getDashboard() {
+
+	@GetMapping(value="/dashboard")
+	public ModelAndView getDashboard(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.print(authentication.getAuthorities());
 		return new ModelAndView("dashboard");
 	}
 	
@@ -115,17 +117,18 @@ public class UrlController {
 		model.addAttribute("users", users);
 		return "manage_users";
 	}
-	
+
 	@GetMapping("logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		  Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
-	        if (auth != null){      
-	        	HttpSession session=request.getSession();
-	        	session.removeAttribute("token");
-	        	session.removeAttribute("username");
-	        	session.invalidate();
-	           new SecurityContextLogoutHandler().logout(request, response, auth);  
-	        }  
-	         return "redirect:/";  
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null){
+			HttpSession session=request.getSession();
+			session.removeAttribute("token");
+			session.removeAttribute("username");
+			session.removeAttribute("Authorization");
+			session.invalidate();
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+		return "redirect:/";
 	}
 }
