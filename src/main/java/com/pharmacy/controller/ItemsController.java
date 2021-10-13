@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,6 +33,7 @@ public class ItemsController {
 	private DistributorItemService distributorService;
 
 	@PostMapping("/additem")
+	@PreAuthorize("hasAnyRole('DISTRIBUTOR','ADMIN')")
 	public ModelAndView addItem(@ModelAttribute("item") ItemPayload item, @RequestParam("username") String distributor,
 			Model model) {
 		ItemsBean itemBean = new ItemsBean();
@@ -55,6 +57,7 @@ public class ItemsController {
 	}
 
 	@GetMapping("/getitems")
+	@PreAuthorize("hasAnyRole('DISTRIBUTOR','ADMIN')")
 	public ModelAndView getItems(@RequestParam("username") String distributor, Model model,
 			HttpServletRequest request) {
 		String token = (String) request.getSession().getAttribute("token");
@@ -69,6 +72,7 @@ public class ItemsController {
 	}
 
 	@GetMapping("/getdistributoritems")
+	@PreAuthorize("hasRole('USER')")
 	public ModelAndView getProducts(@RequestParam("category") String category,
 			@RequestParam("distributor") String distributor, Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -89,6 +93,7 @@ public class ItemsController {
 	}
 
 	@GetMapping("/edititem")
+	@PreAuthorize("hasAnyRole('DISTRIBUTOR','ADMIN')")
 	public ModelAndView editItem(@RequestParam("id") int id, Model model) {
 		DistributorItemBean distributorItem = distributorService.getItemById(id);
 		model.addAttribute("item", distributorItem);
@@ -96,6 +101,7 @@ public class ItemsController {
 	}
 
 	@PostMapping("/edititem")
+	@PreAuthorize("hasAnyRole('DISTRIBUTOR','ADMIN')")
 	public ModelAndView editItem(@RequestParam("itemId") int itemId,
 			@ModelAttribute("item") DistributorItemBean distributorItem, Model model) {
 		ItemsBean item = itemsService.getItemById(itemId);
@@ -108,6 +114,7 @@ public class ItemsController {
 
 	
 	@GetMapping("deleteitem/{id}")
+	@PreAuthorize("hasAnyRole('DISTRIBUTOR','ADMIN')")
 	public ModelAndView deleteItem(@PathVariable int id, Model model) {
 		distributorService.deleteItem(id);
 		model.addAttribute("message", "SUCCESS");

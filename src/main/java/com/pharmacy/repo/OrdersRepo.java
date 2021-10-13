@@ -16,4 +16,7 @@ public interface OrdersRepo extends JpaRepository<OrdersBean, Integer>{
 	public List<OrdersBean> findByDistributorName(String dis_name);
 	@Query(value="select * from orders where order_date =:date", nativeQuery=true)
 	public List<OrdersBean> findByOrderDate(@Param("date") String date);
+	public List<OrdersBean> findByOrderDateAndDistributorName(String orderDate, String distributorName);
+	@Query(value="SELECT * FROM orders WHERE order_date=:order_date AND distributor_name=:distributor_name",nativeQuery=true)
+	public List<OrdersBean> findByOrderDateAndDistributorName1(@Param("order_date") String orderDate,@Param("distributor_name") String distributorName);
 }

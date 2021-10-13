@@ -7,23 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.pharmacy.model.DistributorItemBean;
 import com.pharmacy.service.DistributorItemService;
-import com.pharmacy.service.ItemsService;
 
 @Controller
+@PreAuthorize("hasRole('USER')")
 public class CartController {
 
-	@Autowired
-	private ItemsService itemsService;
 
 	@Autowired
 	private DistributorItemService distributorService;
@@ -44,6 +41,7 @@ public class CartController {
 		DistributorItemBean item=new DistributorItemBean();
 		item.setId(id);
 		HttpSession session=request.getSession();
+		@SuppressWarnings("unchecked")
 		List<DistributorItemBean> existingCart=(ArrayList<DistributorItemBean>)session.getAttribute("cartList");
 		if(existingCart==null) {
 			item=distributorService.getItemById(id);

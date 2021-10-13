@@ -1,12 +1,12 @@
 package com.pharmacy.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import com.pharmacy.model.OrdersBean;
 import com.pharmacy.model.ParticularOrderBean;
@@ -18,107 +18,113 @@ public class OrdersService {
 
 	@Autowired
 	private ParticularProdRepo productRepo;
-	
+
 	@Autowired
 	private OrdersRepo ordersRepo;
-    
+
 	@Autowired
 	private ItemsService items;
+
 	public OrdersService(ParticularProdRepo productRepo, OrdersRepo ordersRepo) {
 		super();
 		this.productRepo = productRepo;
 		this.ordersRepo = ordersRepo;
 	}
-	
-	public int getOrderId(OrdersBean order)
-	{
-		OrdersBean ord = this.ordersRepo.findByUsernameAndOrderDateAndTotalQuantity(order.getUsername(), order.getOrderDate(), order.getTotalQuantity());
-		
+
+	public int getOrderId(OrdersBean order) {
+		OrdersBean ord = this.ordersRepo.findByUsernameAndOrderDateAndTotalQuantity(order.getUsername(),
+				order.getOrderDate(), order.getTotalQuantity());
+
 		return ord.getOrderId();
 	}
-	public String addOrder(OrdersBean order, List<ParticularOrderBean> prodBean)
-	{
+
+	public String addOrder(OrdersBean order, List<ParticularOrderBean> prodBean) {
 		OrdersBean orderBean = this.ordersRepo.save(order);
-		for(ParticularOrderBean prod: prodBean)
-		{
+		for (ParticularOrderBean prod : prodBean) {
 			prod.setOrderBean(orderBean);
 //			this.productRepo.save(prod);
-			System.out.println("saving "+prod);
+			System.out.println("saving " + prod);
 			this.productRepo.save(prod);
 		}
-		if(orderBean != null)
+		if (orderBean != null)
 			return "SUCCESS";
 		else
 			return "not inserted";
 	}
-	public String addFile(OrdersBean order)
-	{
+
+	public String addFile(OrdersBean order) {
 		OrdersBean orderBean = this.ordersRepo.save(order);
-		
-		if(orderBean != null)
+
+		if (orderBean != null)
 			return "SUCCESS";
 		else
 			return "not inserted";
 	}
-	public List<OrdersBean> getOrdersByDate(String date){
-		System.out.println("Hello bro i am in date of orders ");
-		List<OrdersBean> orders = this.ordersRepo.findByOrderDate(date);
-		// System.out.println("orders of date "+orders);
+
+	public List<OrdersBean> getOrdersByDate(String date, String role, String username) {
+		List<OrdersBean> orders=new ArrayList<>();
+		if (role.equals("ADMIN")) {
+			orders = this.ordersRepo.findByOrderDate(date);
+			System.out.println("admin orders ");
+		}
+		else if(role.equals("DISTRIBUTOR")) {
+			orders = this.ordersRepo.findByOrderDateAndDistributorName(date, username);
+//			List<OrdersBean> ordersDate=new ArrayList<>();
+//			ordersDate=ordersRepo.findByOrderDate(date);
+//			for(OrdersBean ord : ordersDate)
+//			{
+//				if(ord. == date)
+//					orders.add(ord);
+//			}
+			
+		}
 		return orders;
 	}
-	
-	public List<OrdersBean> getOrdersByDistributor(String distributorName){
+
+	public List<OrdersBean> getOrdersByDistributor(String distributorName) {
 		return ordersRepo.findByDistributorName(distributorName);
 	}
-	
-	public List<OrdersBean> getAllOrders()
-	{
+
+	public List<OrdersBean> getAllOrders() {
 		return this.ordersRepo.findAll();
 	}
-	public List<OrdersBean> getAllOrdersByUsername(String username)
-	{
+
+	public List<OrdersBean> getAllOrdersByUsername(String username) {
 		return this.ordersRepo.findByUsername(username);
 	}
+
 	@Transactional
-	public void deleteOrderById(int order_id)
-	{
+	public void deleteOrderById(int order_id) {
 		this.ordersRepo.deleteById(order_id);
 		System.out.println("Deleted");
 	}
+
 	@Transactional
-	public OrdersBean updateOrderStatus(int order_id, String status,String message)
-	{
-			OrdersBean ord = this.ordersRepo.findById(order_id);
-			ord.setStatus(status);
-			ord.setMessage(message);
-			return this.ordersRepo.save(ord);
-			
+	public OrdersBean updateOrderStatus(int order_id, String status, String message) {
+		OrdersBean ord = this.ordersRepo.findById(order_id);
+		ord.setStatus(status);
+		ord.setMessage(message);
+		return this.ordersRepo.save(ord);
+
 	}
-	public List<OrdersBean> getOrdersByNameAndRole(String name, String role) 
-	{
-		if(role.equals("USER"))
-		{
-			 List<OrdersBean> list = this.ordersRepo.findByUsername(name);
-			 return list;
-			
-		}
-		else if(role.equals("DISTRIBUTOR"))
-		{
-			 return this.ordersRepo.findByDistributorName(name);
-		}
-		else
-		{
-			return null;
+
+	public List<OrdersBean> getOrdersByNameAndRole(String name, String role) {
+		
+		if (role.equals("USER")) {
+			List<OrdersBean> list = this.ordersRepo.findByUsername(name);
+			return list;
+
+		} else {
+			return this.ordersRepo.findByDistributorName(name);
 		}
 	}
-	
-	public OrdersBean getOrderByOrdeId(int order_id)
-	{
+
+	public OrdersBean getOrderByOrdeId(int order_id) {
 		return this.ordersRepo.findById(order_id);
 	}
-	
+
 	public void updateOrder(OrdersBean newOrder) {
-		OrdersBean order=ordersRepo.findById(newOrder.getOrderId());
+		OrdersBean order = ordersRepo.findById(newOrder.getOrderId());
 		order.setStatus(newOrder.getStatus());
 		order.setMessage(newOrder.getMessage());
 		order.setDistributorName(newOrder.getDistributorName());

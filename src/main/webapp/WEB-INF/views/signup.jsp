@@ -59,22 +59,26 @@
 							<form:input type="email" path="email" class="form-control" placeholder="Email" required="required"/> 
 							 <label for="email">Email
 								address</label>
+								<form:errors path="email" cssClass="error" />
 						</div>
 						<div class="form-floating">
 							<form:input type="text" class="form-control" path="phoneNumber" name="phoneNumber"
 								placeholder="Mobile number" minlength="10" maxlength="10" required="required"/>
 							<label for="phoneNumber">Mobile Number</label>
+							<form:errors path="phoneNumber" cssClass="error" />
 						</div>
 						<div class="form-floating">
 							<form:input type="text" class="form-control" name="username" path="username"
 								placeholder="Username" minlength="6" maxlength="20" required="required"/>
-							<label for="username">Username</label>
+							<label for="username">Username (minimum 6 characters)</label>
+							<form:errors path="username" cssClass="error" />
 						</div>
 						<p class="text-danger ms-3" id="error"></p>
 						<div class="form-floating">
 							<form:input type="password" class="form-control" path="password" name="password"
 								placeholder="Password" required="required" minlength="8"/> <label
-								for="password">Password</label>
+								for="password">Password (minimum 8 characters)</label>
+								<form:errors path="password" cssClass="error" />
 						</div>
 						<div class="form-floating">
 							<input type="password" class="form-control" name="password2"

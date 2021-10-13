@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity(name = "orders")
 public class OrdersBean {
@@ -21,12 +23,15 @@ public class OrdersBean {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, updatable = false)
 	private int orderId;
+
 	@Column(nullable = false)
 	private String username;
+
 	@Column(nullable = true)
 	private String distributorName;
 	private String address;
 	private float price;
+
 	private String phoneNumber;
 	private int totalQuantity;
 	@Column(nullable = false)
@@ -38,22 +43,19 @@ public class OrdersBean {
 	@Column(name = "prescription")
 	private byte[] prescription;
 	private boolean medicine;
-	@Column(length=50)
+	@Column(length = 50)
 	private String message;
 	@Transient
 	private String base64Image;
-	
-	
 
 	public String getBase64Image() {
-		  base64Image = Base64.getEncoder().encodeToString(this.prescription);
-		  return base64Image;
+		base64Image = Base64.getEncoder().encodeToString(this.prescription);
+		return base64Image;
 	}
 
 	public void setBase64Image(String base64Image) {
 		this.base64Image = base64Image;
 	}
-
 
 	public OrdersBean(int orderId, String username, String distributorName, String address, float price,
 			String phoneNumber, int totalQuantity, String orderDate, String status, List<ParticularOrderBean> partProds,
@@ -180,5 +182,5 @@ public class OrdersBean {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
 }

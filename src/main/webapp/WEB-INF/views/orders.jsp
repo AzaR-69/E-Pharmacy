@@ -40,7 +40,9 @@
 	margin-top: 20%;
 	margin-left: 45%;
 }
-
+#order-form{
+            margin-left: 15%;
+        }
 @media screen and (max-width:670px) {
 	#buttonCard {
 		margin-top: 40%;
@@ -56,7 +58,7 @@
 	response.setHeader("Expires", "0");
 	String token = (String) session.getAttribute("token");
 	String username = (String) session.getAttribute("username");
-	String role=(String)session.getAttribute("role");
+	String role = (String) session.getAttribute("role");
 
 	if (username == null || token == null) {
 		response.sendRedirect("login");
@@ -92,6 +94,24 @@
 				<u>Your Orders</u>
 			</p>
 			<%
+			if (token.contains("ADMIN") || token.contains("DISTRIBUTOR")) {
+			%>
+			<form action="/pdfConvertByDate/<%=role%>" id="order-form" method="post">
+                <div class="row align-items-center g-3">
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="date">Download By Date</label>
+                        <input type="date" class="form-control" name="date" id="date" placeholder="Download By Date">
+                    </div>
+                    <div class="col-auto">
+                        <input type="submit" value="Download Orders by Date" class="btn btn-secondary">
+                    </div>
+                    <div class="col-auto">
+                        <a href="/pdfConvert/<%=role%>" class="btn btn-primary text-center">Export
+                            all orders as PDF</a>
+                    </div>
+                </div>
+            </form>
+			<%}
 			if (orders != null && !orders.isEmpty()) {
 				for (OrdersBean order : orders) {
 					String status = order.getStatus();
@@ -162,14 +182,13 @@
 							<ul class="nav position-absolute top-0 end-0 mt-5 me-2">
 								<li><span><a
 										href="${pageContext.request.contextPath}/particularOrder/<%=order.getOrderId()%>"
-										role="button" class="btn btn-success btn-sm"> 
-										<%
-										 if (token.contains("USER")) {
-									 	%>View Bill<%
- 										} else {
- 										%>Update<%
- 										}
- 										%>
+										role="button" class="btn btn-success btn-sm"> <%
+ if (token.contains("USER")) {
+ %>View Bill<%
+ } else {
+ %>Update<%
+ }
+ %>
 									</a></span></li>
 								<%
 								if (status.equals("REJECTED")) {
@@ -226,18 +245,15 @@
 			<%
 			}
 			%>
-			<%
-			if (token.contains("ADMIN") || token.contains("DISTRIBUTOR")) {
-			%>
-			<form action="/pdfConvertByDate&role=<%=role %>" class="form-inline" method="post">
-				<input type="date" name="date" class="form-control"> <label
-					for="date">Download by date</label> <input type="submit"
-					value="Download by Date" class="btn btn-secondary">
-			</form>
-			<a href="/pdfConvert" class="btn btn-primary">Export to PDF</a>
-			<%
-			}
-			%>
+			<!--div style="margin-left: 15%;">
+				<form action="/pdfConvertByDate/<%=role%>" method="post">
+					<input type="date" name="date" class="w-25 form-control" required> <br>
+					<input type="submit" value="Download Orders by Date"
+						class="btn btn-secondary">
+				</form>
+				<br> <a href="/pdfConvert/<%=role%>"
+					class="btn btn-primary text-center">Export all orders as PDF</a>
+			</div-->
 		</div>
 	</div>
 	<%

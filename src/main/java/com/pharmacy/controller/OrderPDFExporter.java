@@ -1,7 +1,6 @@
 package com.pharmacy.controller;
 
-import java.awt.Color;
-import java.awt.Font;
+
 import java.io.IOException;
 import java.util.List;
 

@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ public class OrdersController {
 
 	// Display the particular order page
 	@GetMapping("/particularOrder/{orderId}")
+	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
 	public ModelAndView particularOrder(@PathVariable("orderId") int orderId) {
 		OrdersBean ordersBean = this.ordersService.getOrderByOrdeId(orderId);
 		List<ParticularOrderBean> particularOrderBean = this.particularOrderService.getPartByOrderId(orderId);
@@ -58,6 +60,7 @@ public class OrdersController {
 	}
 
 	@GetMapping("/showOrdersAdmin/{username}/{role}")
+	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
 	public ModelAndView showOrdersAdmin(@PathVariable("username") String username, @PathVariable String role) {
 		ModelAndView modelAndView = new ModelAndView();
 		List<OrdersBean> allOrders = ordersService.getAllOrders();
@@ -68,6 +71,7 @@ public class OrdersController {
 	}
 
 	@GetMapping("/medicinerequest")
+	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
 	public ModelAndView showMedicineRequest() {
 		List<OrdersBean> orders = ordersService.getAllOrders();
 		ModelAndView modelAndView = new ModelAndView();
@@ -78,8 +82,10 @@ public class OrdersController {
 
 	// Display orders based on role and username
 	@GetMapping("/showOrders/{username}/{role}")
+	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
 	public ModelAndView showOrders(@PathVariable("username") String username, @PathVariable("role") String role,
 			Model m) {
+		System.out.println("in show orders page ");
 		List<OrdersBean> orders = ordersService.getOrdersByNameAndRole(username, role);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("role", role);
@@ -88,8 +94,9 @@ public class OrdersController {
 		return modelAndView;
 	}
 
-	@GetMapping("/DeleteOrder/{id}")
-	public ModelAndView delete(@RequestParam int userId,@RequestParam boolean medicine, Model model) {
+	@GetMapping("/DeleteOrder")
+	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
+	public ModelAndView delete(@RequestParam("id") int userId,@RequestParam boolean medicine, Model model) {
 		particularOrderService.deleteInTable(userId,medicine);
 		model.addAttribute("message", "SUCCESS");
 		return new ModelAndView("dashboard");
@@ -97,6 +104,7 @@ public class OrdersController {
 	
     
 	@PostMapping("/UpdateOrder/{id}/{medicine}")
+	@PreAuthorize("hasAnyRole('ADMIN','DISTRIBUTOR')")
 	public ModelAndView updateOrderStatus(@PathVariable("id") int id, @PathVariable("medicine") boolean medicine,
 			HttpServletRequest request, Model model) {
 		System.out.println("check"+medicine);
@@ -131,12 +139,14 @@ public class OrdersController {
 	}
 
 	@PostMapping("/orderplaced")
+	@PreAuthorize("hasRole('USER')")
 	public ModelAndView saveOrderDetails(HttpServletRequest request, Model model) {
 
 		String address = request.getParameter("address");
 		String phone = request.getParameter("phone");
 		HttpSession session = request.getSession();
 		List<ParticularOrderBean> products = new ArrayList<>();
+		@SuppressWarnings("unchecked")
 		List<DistributorItemBean> items = (ArrayList<DistributorItemBean>) session.getAttribute("cartList");
 		float totalPrice = 0.0f;
 		int itemsId = 0;
@@ -145,7 +155,6 @@ public class OrdersController {
 		String username = (String) session.getAttribute("username");
 		String date = LocalDate.now().toString();
 		String distributor = "";
-		System.out.println("address " + address + " phone " + phone);
 		for (DistributorItemBean item : items) {
 			ParticularOrderBean product = new ParticularOrderBean();
 			product.setItemName(item.getItemName());
@@ -161,7 +170,6 @@ public class OrdersController {
 
 			products.add(product);
 		}
-		System.out.println("item id " + itemsId);
 		distributor = itemService.getDistributorName(itemBean.getId());
 		OrdersBean order = new OrdersBean();
 		order.setDistributorName(distributor);
@@ -185,6 +193,7 @@ public class OrdersController {
 	}
 	
 	@PostMapping("/fileUpload")
+	@PreAuthorize("hasRole('USER')")
     public ModelAndView saveFile(HttpServletRequest request, Model model,@RequestParam("prescription") MultipartFile prescription) throws IOException 
     {
 		HttpSession session = request.getSession();
@@ -210,8 +219,9 @@ public class OrdersController {
 		
     }
     
-	@GetMapping("/pdfConvert")
-	public void pdfConvert(HttpServletResponse response) throws DocumentException, IOException, com.itextpdf.text.DocumentException
+	@GetMapping("/pdfConvert/{role}")
+	@PreAuthorize("hasAnyRole('ADMIN','DISTRIBUTOR')")
+	public void pdfConvert(@PathVariable("role") String role,HttpServletRequest request,HttpServletResponse response) throws DocumentException, IOException, com.itextpdf.text.DocumentException
 	{
 		response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -220,18 +230,26 @@ public class OrdersController {
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
-        List<OrdersBean> listOrders = this.ordersService.getAllOrders();
+        List<OrdersBean> listOrders = new ArrayList<>();
+        if(role.equals("ADMIN")) {
+        	listOrders=ordersService.getAllOrders();
+        } 
+        else {
+        	String username=(String)request.getSession().getAttribute("username");
+        	System.out.print(username);
+        	listOrders=ordersService.getOrdersByDistributor(username);
+        }
         OrderPDFExporter exporter = new OrderPDFExporter(listOrders);
         exporter.export(response);
 	}
 	
-	@PostMapping("/pdfConvertByDate")
-	public void pdfConvertByDate(@RequestParam("role") String role,HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException, com.itextpdf.text.DocumentException
+	@PostMapping("/pdfConvertByDate/{role}")
+	@PreAuthorize("hasAnyRole('ADMIN','DISTRIBUTOR')")
+	public void pdfConvertByDate(@PathVariable("role") String role,HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException, com.itextpdf.text.DocumentException
 	{
-		System.out.println(role);
 		String date = request.getParameter("date");
 		System.out.println("Date "+date);
-	
+		String username=(String)request.getSession().getAttribute("username");
 //		System.out.println("date products "+this.ordersService.getOrdersByDate(date));
 		response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -240,7 +258,7 @@ public class OrdersController {
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
-        List<OrdersBean> listOrders = 	this.ordersService.getOrdersByDate(date);;
+        List<OrdersBean> listOrders = 	this.ordersService.getOrdersByDate(date,role,username);
         OrderPDFExporter exporter = new OrderPDFExporter(listOrders);
         exporter.export(response);
 	}
