@@ -29,7 +29,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			String jwt = parseJwt(request);
+			String token=(String)request.getSession().getAttribute("Authorization");
+			String jwt = "";
+			if(token!=null) {
+				jwt=parseJwt(token);
+			}
+			//String jwt=parseJwt(request);
 			if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
 				String username = jwtUtil.getUserNameFromJwtToken(jwt);
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -46,11 +51,18 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
-	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authorization");
-
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7, headerAuth.length());
+//	private String parseJwt(HttpServletRequest request) {
+//		String headerAuth = request.getHeader("Authorization");
+//		System.out.print(headerAuth);
+//		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+//			return headerAuth.substring(7, headerAuth.length());
+//		}
+//
+//		return null;
+//	}
+	private String parseJwt(String request) {
+		if (request.startsWith("Bearer ")) {
+			return request.substring(7, request.length());
 		}
 
 		return null;

@@ -6,9 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class UserBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +21,7 @@ public class UserBean {
 	private String name;
 	@Column(length = 30, nullable = false)
 	private String username;
-	@Column(length = 50, nullable = false,unique=true)
+	@Column(length = 50, nullable = false, unique = true)
 	private String email;
 	@Column(length = 10)
 	private String phoneNumber;

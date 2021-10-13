@@ -49,7 +49,8 @@
 				if (orders != null && !orders.isEmpty()) {
 				for (OrdersBean order : orders) {
 					String status = order.getStatus();
-					if (order.isMedicine() && order.getDistributorName()==null) {
+					if (order.isMedicine() && 
+							(order.getDistributorName() == null || order.getDistributorName().equals("PENDING"))) {
 						empty=false;
 			%>
 			<div class="row">

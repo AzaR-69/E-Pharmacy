@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pharmacy.model.DistributorItemBean;
@@ -46,6 +46,7 @@ public class UrlController {
 	}
 	
 	@GetMapping("/continueshopping")
+	@PreAuthorize("hasRole('USER')")
 	public String getShoppingPage() {
 		return "itemslist";
 	}
@@ -57,11 +58,13 @@ public class UrlController {
 	}
 	
 	@GetMapping("/producttype")
+	@PreAuthorize("hasRole('USER')")
 	public String getProductPage() {
 		return "producttype";
 	}
 	
 	@GetMapping("/adduser")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String getAddUserPage(Model model) {
 		model.addAttribute("user",new UserBean());
 		return "addusers";
@@ -74,6 +77,7 @@ public class UrlController {
 	}
 	
 	@GetMapping("/yourcart")
+	@PreAuthorize("hasRole('USER')")
 	public String getCart(HttpServletRequest request) {
 		
 		ArrayList<DistributorItemBean> clist = (ArrayList<DistributorItemBean>) request.getSession().getAttribute("cartList");
@@ -85,24 +89,30 @@ public class UrlController {
 	}
 	
 	@GetMapping("/shopping")
+	@PreAuthorize("hasRole('USER')")
 	public String getShoppingPage(Model model) {
 		List<ItemsBean> items=itemsService.getAllItems();
 		model.addAttribute("items",items);
 		return "shopping";
 	}
-	
-	@GetMapping("/dashboard")
-	public ModelAndView getDashboard() {
+
+	@GetMapping(value="/dashboard")
+	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
+	public ModelAndView getDashboard(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.print(authentication.getAuthorities());
 		return new ModelAndView("dashboard");
 	}
 	
 	@GetMapping("/manageitems")
+	@PreAuthorize("hasAnyRole('DISTRIBUTOR','ADMIN')")
 	public String getItems(Model model) {
 			model.addAttribute("item", new ItemPayload());
 			return "items";
 	}
 	
 	@GetMapping("/updateprofile")
+	@PreAuthorize("hasAnyRole('USER','DISTRIBUTOR','ADMIN')")
 	public String getEditProfile(@RequestParam String username,Model model) {
 		UserBean user=userService.getUser(username);
 		model.addAttribute("user", user);
@@ -110,22 +120,24 @@ public class UrlController {
 	}
 	
 	@GetMapping("/manageusers")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String manageUsers(Model model) {
 		List<UserBean> users=userService.getUsers();
 		model.addAttribute("users", users);
 		return "manage_users";
 	}
-	
+
 	@GetMapping("logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		  Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
-	        if (auth != null){      
-	        	HttpSession session=request.getSession();
-	        	session.removeAttribute("token");
-	        	session.removeAttribute("username");
-	        	session.invalidate();
-	           new SecurityContextLogoutHandler().logout(request, response, auth);  
-	        }  
-	         return "redirect:/";  
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null){
+			HttpSession session=request.getSession();
+			session.removeAttribute("token");
+			session.removeAttribute("username");
+			session.removeAttribute("Authorization");
+			session.invalidate();
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+		return "redirect:/";
 	}
 }
