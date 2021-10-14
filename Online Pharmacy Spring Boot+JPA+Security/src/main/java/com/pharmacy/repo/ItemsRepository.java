@@ -16,5 +16,7 @@ public interface ItemsRepository extends JpaRepository<ItemsBean, Integer> {
 	
 	int deleteByDistributor(String distributor);
 	
+	int getIdByDistributor(String distributor);
+	
 	ItemsBean findById(int id);
 }

@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `pharmacy`
 --
-
+CREATE DATABASE pharmacy;
+USE pharmacy;
 -- --------------------------------------------------------
 
 --
@@ -47,23 +48,7 @@ INSERT INTO `distributor_item` (`id`, `items_id`, `item_name`, `price`, `descrip
 (21, 5, 'Thermometer', 100, 'Used to check temperature', 200),
 (22, 5, 'First aid kit', 50, 'Used in emergency situations', 400),
 (23, 5, 'Bandage Strips', 5, 'Used to cover injury', 500),
-(27, 6, 'Pepsodent Toothpaste', 50, 'Used to whiten teeth', 400),
-(28, 6, 'Baby Oil', 25, 'Used for babies', 482),
-(29, 6, 'Baby Powder', 20, 'Used for babies', 85),
-(30, 6, 'Baby Health Kit', 150, 'Used for babies', 592),
-(31, 6, 'MamaEarth Sampoo', 200, 'Hairfall shampoo', 95),
-(32, 7, 'Paracetomol', 1.5, 'Used for cold and fever', 100),
-(33, 7, 'Vicks 500', 2, 'Used for cold', 90),
-(34, 7, 'Crocine', 2, 'Used for cold and fever', 90),
-(36, 7, 'Paracetomol X', 4, 'Used for cold', 500),
-(37, 7, 'Dolo 600', 1.5, 'Used for fever', 100),
-(39, 8, 'Gloves', 8, 'Used for protection', 150),
-(40, 7, 'Vicks action 420', 2.5, 'Used for cold', 150),
-(41, 9, 'Crocine', 2, 'Used for cold', 110),
-(43, 9, 'Vitamin E ', 2, 'Used for strengthening', 290),
-(44, 9, 'Calbol', 1.5, 'Used for cold', 100),
-(45, 6, 'Germ Free Soap', 15.5, 'Used for bathing', 150),
-(46, 6, 'Mouth Wash', 30, 'Used to clean germs', 195);
+(39, 8, 'Gloves', 8, 'Used for protection', 150);
 
 -- --------------------------------------------------------
 
@@ -83,10 +68,7 @@ CREATE TABLE `items` (
 
 INSERT INTO `items` (`id`, `distributor`, `category`) VALUES
 (5, 'shah_distributor', 'Basic Supplies'),
-(6, 'sid_distributor', 'Toiletries'),
-(7, 'raja_distributor', 'Medications'),
-(8, 'aiden_distributor', 'Basic Supplies'),
-(9, 'kdr_distributor', 'Medications');
+(8, 'aiden_distributor', 'Basic Supplies');
 
 -- --------------------------------------------------------
 
@@ -98,24 +80,16 @@ CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `username` varchar(200) NOT NULL,
   `orderDate` varchar(200) NOT NULL,
-  `total_quantity` int(11) NOT NULL,
-  `price` float NOT NULL,
+  `total_quantity` int(11),
+  `price` float,
   `address` varchar(8000) NOT NULL,
   `phone_number` varchar(10) NOT NULL,
-  `distributor_name` varchar(200) NOT NULL,
+  `distributor_name` varchar(200),
+  `medicine` int,
+  `message` varchar(100),
+  `prescription` blob,
   `status` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`order_id`, `username`, `orderDate`, `total_quantity`, `price`, `address`, `phone_number`, `distributor_name`, `status`) VALUES
-(6, 'mah_ali', '2021-10-01', 30, 55, 'pune buildings, pune', '7458963322', 'kdr_distributor', 'ACCEPTED'),
-(13, 'mah_ali', '2021-10-02', 20, 40, 'Wayne Manor, Gowtham City, Royapettah', '8544111222', 'raja_distributor', 'DELIVERED'),
-(15, 'sam_fisher', '2021-10-02', 100, 150, 'Wayne Manor, Gowtham City, Royapettah', '8825908128', 'raja_distributor', 'ACCEPTED'),
-(16, 'sam_fisher', '2021-10-02', 25, 1450, 'No:3 ashok nagar, chennai', '8123654444', 'sid_distributor', 'DELIVERED'),
-(17, 'azar_bazar', '2021-10-02', 15, 975, 'pune buildings, pune', '8544111222', 'sid_distributor', 'ACCEPTED');
 
 -- --------------------------------------------------------
 
@@ -127,28 +101,10 @@ CREATE TABLE `particular_order_prod` (
   `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `item_name` varchar(200) NOT NULL,
-  `price` float NOT NULL,
-  `quantity` int(11) NOT NULL
+  `price` float,
+  `quantity` int(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `particular_order_prod`
---
-
-INSERT INTO `particular_order_prod` (`id`, `order_id`, `item_name`, `price`, `quantity`) VALUES
-(18, 6, 'Crocine', 20, 10),
-(19, 6, 'Vitamin E ', 20, 10),
-(20, 6, 'Calbol', 15, 10),
-(28, 13, 'Vicks 500', 20, 10),
-(29, 13, 'Crocine', 20, 10),
-(32, 15, 'Paracetomol', 75, 50),
-(33, 15, 'Dolo 600', 75, 50),
-(34, 16, 'Baby Oil', 250, 10),
-(35, 16, 'Baby Powder', 200, 10),
-(36, 16, 'MamaEarth Sampoo', 1000, 5),
-(37, 17, 'Baby Powder', 100, 5),
-(38, 17, 'Baby Oil', 125, 5),
-(39, 17, 'Baby Health Kit', 750, 5);
 
 -- --------------------------------------------------------
 

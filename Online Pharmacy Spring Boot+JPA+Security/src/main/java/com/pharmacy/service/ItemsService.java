@@ -117,4 +117,10 @@ public class ItemsService{
 	public List<DistributorItemBean> getDistributorItems(String distributor) {
 		return distributorRepo.findByItemBean(itemsRepository.findByDistributor(distributor));
 	}
+	
+	public void deleteItemsByDistributor(String distributor) {
+		int id=itemsRepository.getIdByDistributor(distributor);
+		distributorRepo.deleteByItemsId(id);
+		itemsRepository.deleteByDistributor(distributor);
+	}
 }

@@ -31,7 +31,7 @@ public class ParticularOrderProductService implements Serializable {
 
 	public void deleteInTable(int id, boolean isMedicine) {
 		if (!isMedicine) {
-			this.productRepo.deleteById(id);
+			this.productRepo.deleteByOrderId(id);
 		}
 		this.ordersRepo.deleteById(id);
 	}

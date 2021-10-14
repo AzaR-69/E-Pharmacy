@@ -64,7 +64,7 @@ public class UserController {
 		try {
 			session.setAttribute("token", userService.decodeToken(jwt));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			return new ModelAndView("error");
 		}
 
 		return new ModelAndView("dashboard");

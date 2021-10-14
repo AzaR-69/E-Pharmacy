@@ -22,9 +22,9 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 	rel="stylesheet" />
 <script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
 <script 
 	src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 <style>
@@ -209,6 +209,7 @@ window.onload = function () {
 											<option value="REJECTED">Reject</option>
 											<option value="DELIVERED">Delivered</option>
 										</select>
+										<br>
 										<div class="form-floating w-50">
 											<input type="text" class="form-control" name="message"
 												placeholder="Message" value="<%=order.getMessage()%>"
@@ -245,7 +246,7 @@ window.onload = function () {
 									<%
 										}
 									%>
-									<button class="btn btn-primary float-end" id="download"> Download as PDF</button>
+									<button class="btn btn-outline-primary btn-lg me-1 float-end" id="download"> Download as PDF</button>
 								</div>
 							</div>
 						</div>
