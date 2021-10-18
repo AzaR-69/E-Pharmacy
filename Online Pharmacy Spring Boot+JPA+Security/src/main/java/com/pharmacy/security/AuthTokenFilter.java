@@ -49,7 +49,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
-	
 	private String parseJwt(String request) {
 		if (request.startsWith("Bearer ")) {
 			return request.substring(7, request.length());

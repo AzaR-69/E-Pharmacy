@@ -45,9 +45,9 @@ public class ParticularOrderProductService implements Serializable {
 		return this.productRepo.save(prod);
 	}
 
-	public List<ParticularOrderBean> getPartByOrderId(int orderId) {
-		OrdersBean order = this.ordersRepo.findById(orderId);
-		return (this.productRepo).findByOrderBean(order);
+	public List<ParticularOrderBean> getPartByOrderId(int order_id) {
+		OrdersBean ord = this.ordersRepo.findById(order_id);
+		return (this.productRepo).findByOrderBean(ord);
 	}
 
 	public List<ParticularOrderBean> getAllProds() {

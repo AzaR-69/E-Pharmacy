@@ -81,13 +81,13 @@ public class OrdersService {
 	}
 
 	@Transactional
-	public void deleteOrderById(int orderId) {
-		this.ordersRepo.deleteById(orderId);
+	public void deleteOrderById(int order_id) {
+		this.ordersRepo.deleteById(order_id);
 	}
 
 	@Transactional
-	public OrdersBean updateOrderStatus(int orderId, String status, String message) {
-		OrdersBean ord = this.ordersRepo.findById(orderId);
+	public OrdersBean updateOrderStatus(int order_id, String status, String message) {
+		OrdersBean ord = this.ordersRepo.findById(order_id);
 		ord.setStatus(status);
 		ord.setMessage(message);
 		return this.ordersRepo.save(ord);
@@ -105,8 +105,8 @@ public class OrdersService {
 		}
 	}
 
-	public OrdersBean getOrderByOrdeId(int orderId) {
-		return this.ordersRepo.findById(orderId);
+	public OrdersBean getOrderByOrdeId(int order_id) {
+		return this.ordersRepo.findById(order_id);
 	}
 
 	public void updateOrder(OrdersBean newOrder) {

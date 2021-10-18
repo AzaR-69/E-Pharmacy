@@ -69,7 +69,7 @@ public class UserService {
 
 	public String decodeToken(String token) throws UnsupportedEncodingException {
 		String payload = token.split("\\.")[1];
-		//String decoded = new String(Base64.decodeBase64(payload), "UTF-8");
-		return new String(Base64.decodeBase64(payload), "UTF-8");
+		String decoded = new String(Base64.decodeBase64(payload), "UTF-8");
+		return decoded;
 	}
 }

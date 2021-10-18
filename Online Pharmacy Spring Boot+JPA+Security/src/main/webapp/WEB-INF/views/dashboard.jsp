@@ -97,7 +97,7 @@
               	<div class="col-md-4">
                 <div class="card shadow bg-body border-primary rounded " style="width: 25rem;">
                   <img
-                    src="${pageContext.request.contextPath}/resources/assets/orders.jpg"
+                    src="https://www.supply-chain.gr/wp-content/uploads/2020/06/1-3.jpg"
                     class="card-img-top"  style="height: 250px;" alt="View Order">
                   <div class="card-body text-center">
                     <h5 class="card-title text-center fw-bold">Your Orders</h5>

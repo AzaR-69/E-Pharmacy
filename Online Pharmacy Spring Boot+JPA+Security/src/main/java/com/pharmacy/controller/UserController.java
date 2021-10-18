@@ -127,7 +127,6 @@ public class UserController {
 	@GetMapping("/find/role/{username}")
 	public ResponseEntity<Object> findByUserRole(@PathVariable("username") String username) {
 		Object user = userService.getRole(username);
-		System.out.println("User role " + user);
 		if (user == null) {
 			return new ResponseEntity<>("Not Found", HttpStatus.OK);
 		}

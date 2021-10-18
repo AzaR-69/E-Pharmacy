@@ -133,7 +133,6 @@ public class UrlController {
 			session.removeAttribute("token");
 			session.removeAttribute("username");
 			session.removeAttribute("Authorization");
-			session.removeAttribute("role");
 			session.invalidate();
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
