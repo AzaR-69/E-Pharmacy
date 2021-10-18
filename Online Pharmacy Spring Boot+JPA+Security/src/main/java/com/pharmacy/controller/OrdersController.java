@@ -85,7 +85,6 @@ public class OrdersController {
 	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
 	public ModelAndView showOrders(@PathVariable("username") String username, @PathVariable("role") String role,
 			Model m) {
-		System.out.println("in show orders page ");
 		List<OrdersBean> orders = ordersService.getOrdersByNameAndRole(username, role);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("role", role);
@@ -107,7 +106,6 @@ public class OrdersController {
 	@PreAuthorize("hasAnyRole('ADMIN','DISTRIBUTOR')")
 	public ModelAndView updateOrderStatus(@PathVariable("id") int id, @PathVariable("medicine") boolean medicine,
 			HttpServletRequest request, Model model) {
-		System.out.println("check"+medicine);
 		String role = (String) request.getSession().getAttribute("role");
 		String status = request.getParameter("status");
 		String message = request.getParameter("message");
@@ -116,7 +114,6 @@ public class OrdersController {
 		if (medicine && role.equals("DISTRIBUTOR") ) {
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
 			float price = Float.parseFloat(request.getParameter("price"));
-			//OrdersBean order=new OrdersBean();
 			order.setStatus(status);
 			order.setMessage(message);
 			order.setTotalQuantity(quantity);
@@ -126,7 +123,7 @@ public class OrdersController {
 			
 		}
 		else {
-			OrdersBean Update = ordersService.updateOrderStatus(id, status,message);
+			ordersService.updateOrderStatus(id, status,message);
 			if (status.equals("ACCEPTED") && role.equals("DISTRIBUTOR")) {
 				List<ParticularOrderBean> products = particularOrderService.getPartByOrderId(id);
 				itemService.updateDistributorItem(username, products);
@@ -149,7 +146,6 @@ public class OrdersController {
 		@SuppressWarnings("unchecked")
 		List<DistributorItemBean> items = (ArrayList<DistributorItemBean>) session.getAttribute("cartList");
 		float totalPrice = 0.0f;
-		int itemsId = 0;
 		int totalQuantity = 0;
 		ItemsBean itemBean = new ItemsBean();
 		String username = (String) session.getAttribute("username");
@@ -164,8 +160,6 @@ public class OrdersController {
 			product.setQuantity(quantity);
 			totalQuantity += quantity;
 			totalPrice += price;
-			itemsId = item.getId();
-//			distributor= item.getItemBean().getDistributor();
 			itemBean.setId(item.getItemBean().getId());
 
 			products.add(product);
@@ -187,7 +181,6 @@ public class OrdersController {
 			session.removeAttribute("category");
 			return new ModelAndView("order-success");
 		}
-		System.out.println(products);
 		return new ModelAndView("order-success");
 
 	}
@@ -201,7 +194,6 @@ public class OrdersController {
 		String address = request.getParameter("address");
 		String phone = request.getParameter("phone");
 		String date=LocalDate.now().toString();
-		
 		byte[] image = prescription.getBytes();
 		OrdersBean order = new OrdersBean();
 		order.setAddress(address);
@@ -212,7 +204,6 @@ public class OrdersController {
 		order.setMessage("Order Placed, pending approval");
 		order.setMedicine(true);
 		order.setPrescription(image);
-		//  xftaorder.setDistributorName(null);
 		ordersService.addFile(order);
 		model.addAttribute("message", "SUCCESS");
 		return new ModelAndView("order-success");
@@ -226,7 +217,6 @@ public class OrdersController {
 		response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
-         
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
@@ -236,7 +226,6 @@ public class OrdersController {
         } 
         else {
         	String username=(String)request.getSession().getAttribute("username");
-        	System.out.print(username);
         	listOrders=ordersService.getOrdersByDistributor(username);
         }
         OrderPDFExporter exporter = new OrderPDFExporter(listOrders);
@@ -248,13 +237,10 @@ public class OrdersController {
 	public void pdfConvertByDate(@PathVariable("role") String role,HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException, com.itextpdf.text.DocumentException
 	{
 		String date = request.getParameter("date");
-		System.out.println("Date "+date);
 		String username=(String)request.getSession().getAttribute("username");
-//		System.out.println("date products "+this.ordersService.getOrdersByDate(date));
 		response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-         
+        String currentDateTime = dateFormatter.format(new Date()); 
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);

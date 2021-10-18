@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.pharmacy.service.MyUserDetailsService;
@@ -34,7 +33,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			if(token!=null) {
 				jwt=parseJwt(token);
 			}
-			//String jwt=parseJwt(request);
 			if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
 				String username = jwtUtil.getUserNameFromJwtToken(jwt);
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -51,15 +49,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
-//	private String parseJwt(HttpServletRequest request) {
-//		String headerAuth = request.getHeader("Authorization");
-//		System.out.print(headerAuth);
-//		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-//			return headerAuth.substring(7, headerAuth.length());
-//		}
-//
-//		return null;
-//	}
+	
 	private String parseJwt(String request) {
 		if (request.startsWith("Bearer ")) {
 			return request.substring(7, request.length());

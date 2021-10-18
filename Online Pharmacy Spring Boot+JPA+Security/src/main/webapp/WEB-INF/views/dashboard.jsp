@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
@@ -97,7 +97,7 @@
               	<div class="col-md-4">
                 <div class="card shadow bg-body border-primary rounded " style="width: 25rem;">
                   <img
-                    src="https://www.supply-chain.gr/wp-content/uploads/2020/06/1-3.jpg"
+                    src="${pageContext.request.contextPath}/resources/assets/orders.jpg"
                     class="card-img-top"  style="height: 250px;" alt="View Order">
                   <div class="card-body text-center">
                     <h5 class="card-title text-center fw-bold">Your Orders</h5>

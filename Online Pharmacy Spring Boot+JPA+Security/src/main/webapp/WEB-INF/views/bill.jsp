@@ -5,7 +5,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
@@ -86,8 +86,6 @@ body {
 							%>
 						</tbody>
 					</table>
-					<!-- <p class="h5 float-end me-1">Grand Total: <span class="text-muted">Rs.100</span></p><br>
-                    <p class="h5 float-end me-1">Payment Mode: <span class="text-muted">COD</span></p> -->
 					<form action="${pageContext.request.contextPath}/orderplaced" method="POST">
 						<ul class="list-group float-end">
 							<li class="list-group-item h5">Grand Total: Rs.<input

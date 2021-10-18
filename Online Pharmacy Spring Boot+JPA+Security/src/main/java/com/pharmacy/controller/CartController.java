@@ -91,9 +91,7 @@ public class CartController {
 		}
 		else if(check.equals("checkout")) {
 			items=this.updateCart(items, values);
-			session.setAttribute("cartList", items);
-			redirect=false;
-			
+			session.setAttribute("cartList", items);	
 		}
 		
 		if(redirect) {

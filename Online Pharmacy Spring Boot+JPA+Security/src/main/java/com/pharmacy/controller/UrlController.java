@@ -79,7 +79,7 @@ public class UrlController {
 	@GetMapping("/yourcart")
 	@PreAuthorize("hasRole('USER')")
 	public String getCart(HttpServletRequest request) {
-		
+		@SuppressWarnings("unchecked")
 		ArrayList<DistributorItemBean> clist = (ArrayList<DistributorItemBean>) request.getSession().getAttribute("cartList");
 		List<DistributorItemBean> list = clist != null ? distributorService.getCartProducts(clist) : null;
 		if (list != null) {
@@ -98,9 +98,7 @@ public class UrlController {
 
 	@GetMapping(value="/dashboard")
 	@PreAuthorize("hasAnyRole('ADMIN','USER','DISTRIBUTOR')")
-	public ModelAndView getDashboard(HttpServletRequest request) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		System.out.print(authentication.getAuthorities());
+	public ModelAndView getDashboard() {
 		return new ModelAndView("dashboard");
 	}
 	
@@ -135,6 +133,7 @@ public class UrlController {
 			session.removeAttribute("token");
 			session.removeAttribute("username");
 			session.removeAttribute("Authorization");
+			session.removeAttribute("role");
 			session.invalidate();
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}

@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
@@ -245,15 +245,6 @@
 			<%
 			}
 			%>
-			<!--div style="margin-left: 15%;">
-				<form action="/pdfConvertByDate/<%=role%>" method="post">
-					<input type="date" name="date" class="w-25 form-control" required> <br>
-					<input type="submit" value="Download Orders by Date"
-						class="btn btn-secondary">
-				</form>
-				<br> <a href="/pdfConvert/<%=role%>"
-					class="btn btn-primary text-center">Export all orders as PDF</a>
-			</div-->
 		</div>
 	</div>
 	<%

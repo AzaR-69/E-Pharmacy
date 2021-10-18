@@ -1,6 +1,6 @@
 package com.pharmacy.service;
 
-import java.io.Serializable;
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -64,30 +64,9 @@ public class ItemsService{
 
 	}
 
-//	public List<Integer> getItemIdByDistributor(String distributor)
-//	{
-//		List<ItemsBean> item = this.itemsRepository.findByDistributor(distributor);
-//		List<Integer> res = new ArrayList<Integer>();
-//		for(ItemsBean it : item)
-//		{
-//			res.add(it.getId());
-//		}
-//		return res;
-//	}
-//	public List<ItemsBean> getItemByDistributor(String distributor)
-//	{
-//		List<ItemsBean> item = this.itemsRepository.findByDistributor(distributor);
-//		return item;
-//	}
-//	public List<DistributorItemBean> getDistributorItems(String distributor)
-//	{
-//		List<ItemsBean> items = this.getItemByDistributor(distributor);
-//		
-//		return this.distributorItemService.getDistributorItems(items);
-//	}
+
 	@Transactional
 	public void updateDistributorItem(String distributor,List<ParticularOrderBean> products) {
-		//System.out.print("Ok1");
 		int itemsId=this.getIdBydistributor(distributor);
 		for(ParticularOrderBean product:products) {
 			distributorItemService.updateItemAfterOrder(itemsId, product.getItemName(),product.getQuantity());

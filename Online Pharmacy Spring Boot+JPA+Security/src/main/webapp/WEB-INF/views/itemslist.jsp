@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
@@ -56,6 +56,9 @@ body {
 				</button>
 			</div>
 			<%} %>
+			<p class="text-center text-secondary  mt-2 mb-4 heading">
+				<u>Quantity can be updated in cart</u>
+			</p>
 			<div class="col-12 mt-5">
 				<div class="row justify-content-around">
 					<c:forEach items="${distributoritems}" var="item">

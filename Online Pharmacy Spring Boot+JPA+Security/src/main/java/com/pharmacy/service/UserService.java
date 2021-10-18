@@ -47,10 +47,8 @@ public class UserService {
 	}
 
 	public UserBean updateUser(UserBean user, String username, String password) {
-//		Optional<UserBean> olduser = userRepo.findById(id);
 		UserBean olduser = (UserBean) userRepo.authenticate(username, password);
 		user.setId(olduser.getId());
-//		user.setId(id);
 		return userRepo.save(user);
 	}
 
@@ -71,7 +69,7 @@ public class UserService {
 
 	public String decodeToken(String token) throws UnsupportedEncodingException {
 		String payload = token.split("\\.")[1];
-		String decoded = new String(Base64.decodeBase64(payload), "UTF-8");
-		return decoded;
+		//String decoded = new String(Base64.decodeBase64(payload), "UTF-8");
+		return new String(Base64.decodeBase64(payload), "UTF-8");
 	}
 }
