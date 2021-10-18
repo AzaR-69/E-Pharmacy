@@ -10,7 +10,6 @@ public class ParticularOrderProductBean {
 	
 	public ParticularOrderProductBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public ParticularOrderProductBean(int orderId, String itemName, int quantity, float price) {
 		super();

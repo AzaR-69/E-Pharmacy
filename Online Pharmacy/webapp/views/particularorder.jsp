@@ -26,19 +26,46 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+	integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+	crossorigin="anonymous"></script>
+<script>
+window.onload = function () {
+    document.getElementById("download")
+        .addEventListener("click", () => {
+            const invoice = this.document.getElementById("cart-card");
+            console.log(invoice);
+            console.log("window"+window);
+             var opt = {
+                margin: [30,40,3,4],
+                filename: 'myBill.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 5 },
+                
+                jsPDF: { unit: 'mm',format: 'letter',orientation:'l' }
+            };
+            html2pdf().from(invoice).set(opt).save();
+        });
+}
+</script>
 <style>
 label {
 	font-weight: bold;
 	color: #6174f0;
 }
-#prescription{
-	width:400px; height:400px; margin-left:25%;
+
+#prescription {
+	width: 400px;
+	height: 400px;
+	margin-left: 25%;
 }
+
 @media screen and (max-width:670px) {
-	#prescription{
-	width:300px; height:300px; margin-left:0%;
-}
+	#prescription {
+		width: 300px;
+		height: 300px;
+		margin-left: 0%;
+	}
 }
 </style>
 </head>
@@ -116,11 +143,13 @@ label {
 									if (order.isMedicine()) {
 								%>
 								<img class="text-center border border-secondary mt-2"
-									src="<%=request.getContextPath()%>/ShowPrescription?orderId=<%=order.getOrderId()%>" id="prescription" />
+									src="<%=request.getContextPath()%>/ShowPrescription?orderId=<%=order.getOrderId()%>"
+									id="prescription" />
 
-								<%}
-									if (products != null) {
-									for (ParticularOrderProductBean product : products) {
+								<%
+									}
+								if (products != null) {
+								for (ParticularOrderProductBean product : products) {
 								%>
 
 								<div class="text-95 text-secondary-d3">
@@ -227,6 +256,8 @@ label {
 									<%
 										}
 									%>
+									<button class="btn btn-outline-primary btn-lg me-1 float-end"
+										id="download">Download as PDF</button>
 								</div>
 							</div>
 						</div>

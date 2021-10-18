@@ -24,7 +24,7 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
 <script>
 	function orders() {
 		document.getElementById("orders").style.display = "block"
@@ -40,7 +40,9 @@
 	margin-top: 20%;
 	margin-left: 45%;
 }
-
+#order-form{
+            margin-left: 15%;
+        }
 @media screen and (max-width:670px) {
 	#buttonCard {
 		margin-top: 40%;
@@ -90,6 +92,24 @@
 				<u>Your Orders</u>
 			</p>
 			<%
+			if (role.equals("ADMIN") || role.equals("DISTRIBUTOR")) {
+			%>
+			<form action="<%=request.getContextPath()%>/PdfByDate?role=<%=role%>" id="order-form" method="post">
+                <div class="row align-items-center g-3">
+                    <div class="col-auto">
+                        <label class="visually-hidden" for="date">Download By Date</label>
+                        <input type="date" class="form-control" name="date" id="date" placeholder="Download By Date">
+                    </div>
+                    <div class="col-auto">
+                        <input type="submit" value="Download Orders by Date" class="btn btn-secondary">
+                    </div>
+                    <div class="col-auto">
+                        <a href="<%=request.getContextPath()%>/ConvertToPdf?role=<%=role%>" class="btn btn-primary text-center">Export
+                            all orders as PDF</a>
+                    </div>
+                </div>
+            </form>
+			<%}
 				if (orders != null && !orders.isEmpty()) {
 				for (OrdersBean order : orders) {
 					String status = order.getStatus();

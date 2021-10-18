@@ -17,7 +17,7 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
 </head>
 <body>
 	<%
@@ -127,7 +127,7 @@
               <div class="col-md-4">
                 <div class="card shadow bg-body border-primary rounded " style="width: 25rem;">
                   <img
-                    src="https://mk0v3bwebsitenomcvs4.kinstacdn.com/wp-content/uploads/Digital-Transformation-for-B2B-Marketers-and-the-Generational-Path-to-Purchase.jpg"
+                    src="${pageContext.request.contextPath}/assets/manageorders.jpg"
                     class="card-img-top"  style="height: 250px;" alt="Edit orders">
                   <div class="card-body text-center">
                     <h5 class="card-title text-center fw-bold">Modify Orders</h5>

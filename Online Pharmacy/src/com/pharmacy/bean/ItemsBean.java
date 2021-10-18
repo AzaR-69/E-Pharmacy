@@ -6,7 +6,6 @@ public class ItemsBean {
 	private String category;
 
 	public ItemsBean() {
-		// TODO Auto-generated constructor stub
 	}
 
 	

@@ -11,7 +11,6 @@ import java.util.List;
 import com.pharmacy.bean.OrdersBean;
 import com.pharmacy.bean.ParticularOrderProductBean;
 import com.pharmacy.util.DBUtil;
-import javax.servlet.http.Part;
 
 public class OrdersDAO {
 	private String sql;
@@ -308,6 +307,79 @@ public class OrdersDAO {
 			return order;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+	public List<OrdersBean> getAllOrdesByDate(String date){
+		sql="SELECT * FROM orders WHERE orderDate=?";
+		List<OrdersBean> orders=new ArrayList<>();
+		try {
+			con = DBUtil.getDBConn();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, date);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				OrdersBean order = new OrdersBean();
+				order.setOrderId(rs.getInt("order_id"));
+				order.setUsername(rs.getString("username"));
+				order.setOrderDate(rs.getString("orderDate"));
+				order.setTotalQuantity(rs.getInt("total_quantity"));
+				order.setPrice(rs.getInt("price"));
+				order.setAddress(rs.getString("address"));
+				order.setDistributorName(rs.getString("distributor_name"));
+				order.setStatus(rs.getString("status"));
+				order.setMedicine(rs.getBoolean("medicine"));
+				order.setMessage(rs.getString("message"));
+				order.setPhoneNumber(rs.getString("phone_number"));
+				orders.add(order);
+			}
+			return orders;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<OrdersBean> getDistributorOrdersByDate(String distributor,String date){
+		sql="SELECT * FROM orders WHERE distributor_name=? AND orderDate=?";
+		List<OrdersBean> orders=new ArrayList<>();
+		try {
+			con = DBUtil.getDBConn();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, distributor);
+			ps.setString(2,date);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				OrdersBean order = new OrdersBean();
+				order.setOrderId(rs.getInt("order_id"));
+				order.setUsername(rs.getString("username"));
+				order.setOrderDate(rs.getString("orderDate"));
+				order.setTotalQuantity(rs.getInt("total_quantity"));
+				order.setPrice(rs.getInt("price"));
+				order.setAddress(rs.getString("address"));
+				order.setDistributorName(rs.getString("distributor_name"));
+				order.setStatus(rs.getString("status"));
+				order.setMedicine(rs.getBoolean("medicine"));
+				order.setMessage(rs.getString("message"));
+				order.setPhoneNumber(rs.getString("phone_number"));
+				orders.add(order);
+			}
+			return orders;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public List<OrdersBean> getOrdersByDate(String date,String role,String distributor){
+		if(role.equals("ADMIN")) {
+			return this.getAllOrdesByDate(date);
+		}
+		else if(role.equals("DISTRIBUTOR")) {
+			return this.getDistributorOrdersByDate(distributor, date);
+		}
+		else {
 			return null;
 		}
 	}

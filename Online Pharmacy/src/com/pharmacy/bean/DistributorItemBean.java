@@ -8,7 +8,6 @@ public class DistributorItemBean {
 	private String description;
 	private int quantity;
 	public DistributorItemBean() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public DistributorItemBean(int id, int itemsId, String itemName, float price, String description, int quantity) {

@@ -187,7 +187,6 @@ public class ItemsDAO {
 
 	public void updateDistributorItem(String distributor, List<ParticularOrderProductBean> products) {
 		int itemsId = this.getItemIdByDistributor(distributor);
-		System.out.println(distributor + ":" + itemsId);
 		for (ParticularOrderProductBean product : products) {
 			itemDAO.updateItemAfterOrder(itemsId, product.getItemName(), product.getQuantity());
 		}
