@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,7 +31,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.pharmacy.model.UserBean;
 import com.pharmacy.payload.LoginBean;
-import com.pharmacy.repo.UserRepository;
 import com.pharmacy.security.JwtUtil;
 import com.pharmacy.service.UserService;
 
@@ -64,7 +61,7 @@ public class UserController {
 		try {
 			session.setAttribute("token", userService.decodeToken(jwt));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			return new ModelAndView("error");
 		}
 
 		return new ModelAndView("dashboard");
@@ -130,7 +127,6 @@ public class UserController {
 	@GetMapping("/find/role/{username}")
 	public ResponseEntity<Object> findByUserRole(@PathVariable("username") String username) {
 		Object user = userService.getRole(username);
-		System.out.println("User role " + user);
 		if (user == null) {
 			return new ResponseEntity<>("Not Found", HttpStatus.OK);
 		}

@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
@@ -22,9 +22,13 @@
 	href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap"
 	rel="stylesheet">
 <script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+	integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+	crossorigin="anonymous"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+	integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+	crossorigin="anonymous"></script>
 <script>
 	function orders() {
 		document.getElementById("orders").style.display = "block"
@@ -40,12 +44,21 @@
 	margin-top: 20%;
 	margin-left: 45%;
 }
-#order-form{
-            margin-left: 15%;
-        }
+
+#order-form {
+	margin-left: 15%;
+}
+
+#alert {
+	margin-left: 20%;
+}
+
 @media screen and (max-width:670px) {
 	#buttonCard {
 		margin-top: 40%;
+		margin-left: 0%;
+	}
+	#alert {
 		margin-left: 0%;
 	}
 }
@@ -93,24 +106,29 @@
 			<p class="fs-2 text-center text-primary fw-bold mt-2 mb-4 heading">
 				<u>Your Orders</u>
 			</p>
+			<br>
 			<%
 			if (token.contains("ADMIN") || token.contains("DISTRIBUTOR")) {
 			%>
-			<form action="/pdfConvertByDate/<%=role%>" id="order-form" method="post">
-                <div class="row align-items-center g-3">
-                    <div class="col-auto">
-                        <label class="visually-hidden" for="date">Download By Date</label>
-                        <input type="date" class="form-control" name="date" id="date" placeholder="Download By Date">
-                    </div>
-                    <div class="col-auto">
-                        <input type="submit" value="Download Orders by Date" class="btn btn-secondary">
-                    </div>
-                    <div class="col-auto">
-                        <a href="/pdfConvert/<%=role%>" class="btn btn-primary text-center">Export
-                            all orders as PDF</a>
-                    </div>
-                </div>
-            </form>
+			<form action="/pdfConvertByDate/<%=role%>" id="order-form"
+				method="post">
+				<div class="row align-items-center g-3">
+					<div class="col-auto">
+						<label class="visually-hidden" for="date">Download By Date</label>
+						<input type="date" class="form-control" name="date" id="date"
+							placeholder="Download By Date">
+					</div>
+					<div class="col-auto">
+						<input type="submit" value="Download Orders by Date"
+							class="btn btn-secondary">
+					</div>
+					<div class="col-auto">
+						<a href="/pdfConvert/<%=role%>"
+							class="btn btn-primary text-center">Export all orders as PDF</a>
+					</div>
+				</div>
+			</form>
+			<br>
 			<%}
 			if (orders != null && !orders.isEmpty()) {
 				for (OrdersBean order : orders) {
@@ -239,21 +257,13 @@
 			}
 			} else {
 			%>
-			<div class="alert alert-danger text-center w-100 mt-5" role="alert">No
-				orders!</div>
+			<div
+				class="alert alert-danger text-center position-absolute top-50 start-50 translate-middle w-50 mt-5"
+				role="alert" id="alert">No Orders!</div>
 
 			<%
 			}
 			%>
-			<!--div style="margin-left: 15%;">
-				<form action="/pdfConvertByDate/<%=role%>" method="post">
-					<input type="date" name="date" class="w-25 form-control" required> <br>
-					<input type="submit" value="Download Orders by Date"
-						class="btn btn-secondary">
-				</form>
-				<br> <a href="/pdfConvert/<%=role%>"
-					class="btn btn-primary text-center">Export all orders as PDF</a>
-			</div-->
 		</div>
 	</div>
 	<%

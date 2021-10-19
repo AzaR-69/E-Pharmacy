@@ -32,7 +32,6 @@ public class OrderPDFExporter {
         document.open();
         com.itextpdf.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         font.setSize(18);
-//        font.setColor(Color.BLUE);
          
         Paragraph p = new Paragraph("List of Orders", font);
         p.setAlignment(Paragraph.ALIGN_CENTER);

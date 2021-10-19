@@ -1,11 +1,11 @@
 package com.pharmacy.repo;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 //import com.mysql.cj.x.protobuf.MysqlxDatatypes.Scalar.String;
 import com.pharmacy.model.DistributorItemBean;
@@ -28,7 +28,9 @@ public interface DistributorItemsRepo extends JpaRepository<DistributorItemBean,
 	@Query("SELECT price FROM DistributorItemBean WHERE id=?1")
 	float getPriceById(int id);
 	
-	
+	@Modifying
+	@Query(value="DELETE FROM distributor_items WHERE items_id=:items_id",nativeQuery=true)
+	void deleteByItemsId(@Param("items_id") int itemsId);
 	
 	DistributorItemBean findByItemBeanAndItemName(ItemsBean item,String itemName);
 }

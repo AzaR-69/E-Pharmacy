@@ -49,7 +49,6 @@ public class ItemsController {
 		distributorItem.setItemName(item.getItemName());
 		distributorItem.setPrice(item.getPrice());
 		distributorItem.setQuantity(item.getQuantity());
-		System.out.println(itemBean + " " + distributorItem);
 		itemsService.addItem(itemBean, distributorItem);
 		model.addAttribute("item", new ItemPayload());
 		model.addAttribute("message", "SUCCESS");

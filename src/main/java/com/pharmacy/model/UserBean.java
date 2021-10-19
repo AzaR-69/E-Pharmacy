@@ -6,9 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -31,7 +28,6 @@ public class UserBean {
 
 	public UserBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public UserBean(String name, String username, String email, String phoneNumber, String password, String role) {

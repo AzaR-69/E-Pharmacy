@@ -5,7 +5,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Pharmacy</title>
@@ -18,9 +18,9 @@
 	href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
 	rel="stylesheet">
 <script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
 <style>
 body {
 	background-color: #e8eaf6 !important;
@@ -86,8 +86,6 @@ body {
 							%>
 						</tbody>
 					</table>
-					<!-- <p class="h5 float-end me-1">Grand Total: <span class="text-muted">Rs.100</span></p><br>
-                    <p class="h5 float-end me-1">Payment Mode: <span class="text-muted">COD</span></p> -->
 					<form action="${pageContext.request.contextPath}/orderplaced" method="POST">
 						<ul class="list-group float-end">
 							<li class="list-group-item h5">Grand Total: Rs.<input

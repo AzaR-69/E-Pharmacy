@@ -22,9 +22,6 @@ public class OrdersService {
 	@Autowired
 	private OrdersRepo ordersRepo;
 
-	@Autowired
-	private ItemsService items;
-
 	public OrdersService(ParticularProdRepo productRepo, OrdersRepo ordersRepo) {
 		super();
 		this.productRepo = productRepo;
@@ -42,8 +39,6 @@ public class OrdersService {
 		OrdersBean orderBean = this.ordersRepo.save(order);
 		for (ParticularOrderBean prod : prodBean) {
 			prod.setOrderBean(orderBean);
-//			this.productRepo.save(prod);
-			System.out.println("saving " + prod);
 			this.productRepo.save(prod);
 		}
 		if (orderBean != null)
@@ -65,17 +60,9 @@ public class OrdersService {
 		List<OrdersBean> orders=new ArrayList<>();
 		if (role.equals("ADMIN")) {
 			orders = this.ordersRepo.findByOrderDate(date);
-			System.out.println("admin orders ");
 		}
 		else if(role.equals("DISTRIBUTOR")) {
 			orders = this.ordersRepo.findByOrderDateAndDistributorName(date, username);
-//			List<OrdersBean> ordersDate=new ArrayList<>();
-//			ordersDate=ordersRepo.findByOrderDate(date);
-//			for(OrdersBean ord : ordersDate)
-//			{
-//				if(ord. == date)
-//					orders.add(ord);
-//			}
 			
 		}
 		return orders;
@@ -96,7 +83,6 @@ public class OrdersService {
 	@Transactional
 	public void deleteOrderById(int order_id) {
 		this.ordersRepo.deleteById(order_id);
-		System.out.println("Deleted");
 	}
 
 	@Transactional

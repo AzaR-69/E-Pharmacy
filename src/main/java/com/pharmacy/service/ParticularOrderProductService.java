@@ -14,6 +14,11 @@ import com.pharmacy.repo.ParticularProdRepo;
 @Service
 public class ParticularOrderProductService implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private ParticularProdRepo productRepo;
 
@@ -31,7 +36,7 @@ public class ParticularOrderProductService implements Serializable {
 
 	public void deleteInTable(int id, boolean isMedicine) {
 		if (!isMedicine) {
-			this.productRepo.deleteById(id);
+			this.productRepo.deleteByOrderId(id);
 		}
 		this.ordersRepo.deleteById(id);
 	}

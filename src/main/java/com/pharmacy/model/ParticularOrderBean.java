@@ -15,6 +15,10 @@ import javax.persistence.ManyToOne;
 @Entity(name="particular_order")
 public class ParticularOrderBean implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(nullable=false, updatable=false)
@@ -37,7 +41,6 @@ public class ParticularOrderBean implements Serializable{
 	}
 	public ParticularOrderBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public int getId() {
 		return id;

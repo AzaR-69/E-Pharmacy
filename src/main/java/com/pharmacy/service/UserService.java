@@ -47,10 +47,8 @@ public class UserService {
 	}
 
 	public UserBean updateUser(UserBean user, String username, String password) {
-//		Optional<UserBean> olduser = userRepo.findById(id);
 		UserBean olduser = (UserBean) userRepo.authenticate(username, password);
 		user.setId(olduser.getId());
-//		user.setId(id);
 		return userRepo.save(user);
 	}
 

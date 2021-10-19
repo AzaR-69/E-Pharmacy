@@ -36,7 +36,6 @@ public class DistributorItemBean implements Serializable{
 	private ItemsBean itemBean;
 	public DistributorItemBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public DistributorItemBean(String itemName, float price, String description, int quantity, ItemsBean itemBean) {
 		super();
